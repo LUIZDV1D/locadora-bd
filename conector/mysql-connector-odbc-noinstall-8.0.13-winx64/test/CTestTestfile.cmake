@@ -1,0 +1,35 @@
+# CMake generated Testfile for 
+# Source directory: G:/ade/build/sb_0-30727560-1537970366.06/mysql-connector-odbc-8.0.13-src/test
+# Build directory: G:/ade/build/sb_0-30727560-1537970366.06/mysql-connector-odbc-8.0.13-src/test
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+add_test(my_basics "my_basics")
+add_test(my_blob "my_blob")
+add_test(my_bulk "my_bulk")
+add_test(my_catalog1 "my_catalog1")
+add_test(my_catalog2 "my_catalog2")
+add_test(my_crash "my_crash")
+add_test(my_curext "my_curext")
+add_test(my_cursor "my_cursor")
+add_test(my_datetime "my_datetime")
+add_test(my_desc "my_desc")
+add_test(my_dyn_cursor "my_dyn_cursor")
+add_test(my_error "my_error")
+add_test(my_info "my_info")
+add_test(my_keys "my_keys")
+add_test(my_param "my_param")
+add_test(my_prepare "my_prepare")
+add_test(my_relative "my_relative")
+add_test(my_result1 "my_result1")
+add_test(my_result2 "my_result2")
+add_test(my_scroll "my_scroll")
+add_test(my_setup "my_setup")
+add_test(my_tran "my_tran")
+add_test(my_types "my_types")
+add_test(my_unicode "my_unicode")
+add_test(my_unixodbc "my_unixodbc")
+add_test(my_use_result "my_use_result")
+add_test(my_bug13766 "my_bug13766")
+add_test(my_pooling "my_pooling")
+add_test(my_auth "my_auth")
