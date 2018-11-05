@@ -5,6 +5,14 @@
  */
 package Visao.Consultar;
 
+import DAO.ClienteDAO;
+import DAO.Conexao;
+import Modelo.Cliente;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author aluno
@@ -17,6 +25,100 @@ public class ConsultarCliente extends javax.swing.JFrame {
     public ConsultarCliente() {
         initComponents();
         setLocationRelativeTo(this);
+        
+        setTitle("Vídeo Locadora");
+        AtualizaTable();
+    }
+    
+    private void PesquisaNome() {
+        
+        String nome = nomecli.getText();
+        
+        Connection con = Conexao.AbrirConexao();
+        ClienteDAO bd = new ClienteDAO(con);
+        List<Cliente> lista = new ArrayList<>();
+        lista = bd.Pesquisar_Nome_Cliente(nome);
+        DefaultTableModel tbm = 
+                (DefaultTableModel) tableC.getModel();
+        
+        while (tbm.getRowCount() > 0) {            
+            tbm.removeRow(0);
+        }
+        
+        int i = 0;
+        
+        for (Cliente tab : lista) {
+            tbm.addRow(new String[i]);
+            tableC.setValueAt(tab.getCodigo(), i, 0);
+            tableC.setValueAt(tab.getNome(), i, 1);
+            tableC.setValueAt(tab.getRG(), i, 2);
+            tableC.setValueAt(tab.getCPF(), i, 3);
+            tableC.setValueAt(tab.getTelefone(), i, 4);
+            tableC.setValueAt(tab.getEmail(), i, 5);
+            i++;
+        }
+        
+        Conexao.FecharConexao(con);
+    }
+    
+    private void AtualizaTable() {
+        Connection con = Conexao.AbrirConexao();
+        ClienteDAO bd = new ClienteDAO(con);
+        List<Cliente> lista = new ArrayList<>();
+        lista = bd.ListarCliente();
+        DefaultTableModel tbm = 
+                (DefaultTableModel) tableC.getModel();
+        
+        while (tbm.getRowCount() > 0) {            
+            tbm.removeRow(0);
+        }
+        
+        int i = 0;
+        
+        for (Cliente tab : lista) {
+            tbm.addRow(new String[i]);
+            tableC.setValueAt(tab.getCodigo(), i, 0);
+            tableC.setValueAt(tab.getNome(), i, 1);
+            tableC.setValueAt(tab.getRG(), i, 2);
+            tableC.setValueAt(tab.getCPF(), i, 3);
+            tableC.setValueAt(tab.getTelefone(), i, 4);
+            tableC.setValueAt(tab.getEmail(), i, 5);
+            i++;
+        }
+        
+        Conexao.FecharConexao(con);
+    }
+    
+    private void PesquisaCod() {
+        
+        String Cod = codcli.getText();
+        int cod = Integer.parseInt(Cod);
+        
+        Connection con = Conexao.AbrirConexao();
+        ClienteDAO bd = new ClienteDAO(con);
+        List<Cliente> lista = new ArrayList<>();
+        lista = bd.Pesquisar_Cod_Cliente(cod);
+        DefaultTableModel tbm = 
+                (DefaultTableModel) tableC.getModel();
+        
+        while (tbm.getRowCount() > 0) {            
+            tbm.removeRow(0);
+        }
+        
+        int i = 0;
+        
+        for (Cliente tab : lista) {
+            tbm.addRow(new String[i]);
+            tableC.setValueAt(tab.getCodigo(), i, 0);
+            tableC.setValueAt(tab.getNome(), i, 1);
+            tableC.setValueAt(tab.getRG(), i, 2);
+            tableC.setValueAt(tab.getCPF(), i, 3);
+            tableC.setValueAt(tab.getTelefone(), i, 4);
+            tableC.setValueAt(tab.getEmail(), i, 5);
+            i++;
+        }
+        
+        Conexao.FecharConexao(con);
     }
 
     /**
@@ -30,13 +132,13 @@ public class ConsultarCliente extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        nomecli = new javax.swing.JTextField();
+        codcli = new javax.swing.JTextField();
+        pen = new javax.swing.JButton();
+        todosc = new javax.swing.JButton();
+        pec = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableC = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -44,21 +146,34 @@ public class ConsultarCliente extends javax.swing.JFrame {
 
         jLabel2.setText("Pesquisa por código:");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/pesquisar.jpg"))); // NOI18N
+        pen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/pesquisar.jpg"))); // NOI18N
+        pen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                penActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("TODOS");
+        todosc.setText("TODOS");
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/pesquisar.jpg"))); // NOI18N
+        pec.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/pesquisar.jpg"))); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableC.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "Código", "Cliente", "RG", "CPF", "Telefone", "Email"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tableC);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,17 +183,17 @@ public class ConsultarCliente extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nomecli, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pen, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(123, 123, 123)
                 .addComponent(jLabel2)
                 .addGap(29, 29, 29)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(codcli, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pec, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(todosc, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
@@ -90,15 +205,15 @@ public class ConsultarCliente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pec, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pen, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(codcli, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nomecli, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(todosc, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -106,6 +221,10 @@ public class ConsultarCliente extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void penActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penActionPerformed
+        PesquisaNome();
+    }//GEN-LAST:event_penActionPerformed
 
     /**
      * @param args the command line arguments
@@ -143,14 +262,14 @@ public class ConsultarCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JTextField codcli;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField nomecli;
+    private javax.swing.JButton pec;
+    private javax.swing.JButton pen;
+    private javax.swing.JTable tableC;
+    private javax.swing.JButton todosc;
     // End of variables declaration//GEN-END:variables
 }
