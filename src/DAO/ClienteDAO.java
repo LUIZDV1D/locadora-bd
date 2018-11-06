@@ -181,7 +181,7 @@ public class ClienteDAO extends ExecuteSQL {
     
     //Capturar o cliente
     public List<Cliente> CapturarCliente(int cod) {
-        String sql = "select * from cliente where idcliente ="+ cod + "";
+        String sql = "select * from cliente where idcliente =" + cod + " ";
         List<Cliente> lista = new ArrayList<>();
         
         try {
@@ -191,16 +191,17 @@ public class ClienteDAO extends ExecuteSQL {
             if (rs != null) {
                 while (rs.next()) {                    
                     Cliente a = new Cliente();
-                    a.setNome(rs.getString(1));
-                    a.setNascimento(rs.getString(2));
-                    a.setRG(rs.getString(3));
-                    a.setCPF(rs.getString(4));
-                    a.setEmail(rs.getString(5));
-                    a.setTelefone(rs.getString(6));
-                    a.setBairro(rs.getString(7));
-                    a.setRua(rs.getString(8));
-                    a.setNumero(rs.getInt(9));
-                    a.setCEP(rs.getString(10));
+                    a.setCodigo(rs.getInt(1));
+                    a.setNome(rs.getString(2));
+                    a.setNascimento(rs.getString(3));
+                    a.setRG(rs.getString(4));
+                    a.setCPF(rs.getString(5));
+                    a.setEmail(rs.getString(6));
+                    a.setTelefone(rs.getString(7));
+                    a.setBairro(rs.getString(8));
+                    a.setRua(rs.getString(9));
+                    a.setNumero(rs.getInt(10));
+                    a.setCEP(rs.getString(11));
                     lista.add(a);
                 }
                 return lista;
@@ -237,6 +238,70 @@ public class ClienteDAO extends ExecuteSQL {
                 return "Atualizado com sucesso";
             } else {
                 return "Erro ao atualizar";
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+    
+    public List<Cliente> ListarComboCliente() {
+        String sql = "select nome from cliente order by nome asc";
+        List<Cliente> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    Cliente a = new Cliente();
+                    a.setNome(rs.getString(1));
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    public List<Cliente> ConsultarCodigoCliente(String nome) {
+        String sql = "select idcliente from cliente where nome = '" + nome + "'";
+        List<Cliente> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    Cliente a = new Cliente();
+                    a.setCodigo(rs.getInt(1));
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    public String Excluir_Cliente(Cliente a) {
+        String sql = "delete from cliente where idcliente = ? and nome = ? ";
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ps.setInt(1, a.getCodigo());
+            ps.setString(2, a.getNome());
+            
+            if (ps.executeUpdate() > 0) {
+                return "Excluido com sucesso";
+            } else {
+                return "Erro ao excluir";
             }
         } catch (Exception e) {
             return e.getMessage();
