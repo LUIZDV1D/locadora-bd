@@ -117,4 +117,53 @@ public class ClassificacaoDAO extends ExecuteSQL {
         }
     }
     
+    
+    
+    public List<Classificacao> ListarComboClassificacao() {
+        String sql = "select nome from classificacao order by nome asc";
+        List<Classificacao> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    Classificacao a = new Classificacao();
+                    a.setNome(rs.getString(1));
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    
+    public List<Classificacao> ConsultarCodigoClassificacao(String nome) {
+        String sql = "select idcclassificacao from classificacao where nome = '" + nome + "'";
+        List<Classificacao> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    Classificacao a = new Classificacao();
+                    a.setCodigo(rs.getInt(1));
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
 }

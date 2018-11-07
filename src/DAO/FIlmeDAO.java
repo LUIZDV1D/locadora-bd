@@ -23,7 +23,7 @@ public class FIlmeDAO extends ExecuteSQL{
     }
     
     public String Inserir_Filme(Filme a) {
-        String sql = "insert into cliente values(0,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into filme values(0,?,?,?,?,?,?)";
         
         try {
            

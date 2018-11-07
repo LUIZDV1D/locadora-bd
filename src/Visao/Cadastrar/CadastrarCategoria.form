@@ -31,7 +31,7 @@
               <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jTextField2" min="-2" pref="173" max="-2" attributes="0"/>
-                  <Component id="jTextField1" min="-2" pref="566" max="-2" attributes="0"/>
+                  <Component id="nomeCat" min="-2" pref="566" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="75" max="32767" attributes="0"/>
           </Group>
@@ -53,7 +53,7 @@
               <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextField1" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                  <Component id="nomeCat" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -165,6 +165,9 @@
               <Color id="Cursor em Forma de M&#xe3;o"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton3">
           <Properties>
@@ -186,7 +189,7 @@
         <Property name="text" type="java.lang.String" value="C&#xf3;digo:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextField1">
+    <Component class="javax.swing.JTextField" name="nomeCat">
     </Component>
     <Component class="javax.swing.JTextField" name="jTextField2">
     </Component>
