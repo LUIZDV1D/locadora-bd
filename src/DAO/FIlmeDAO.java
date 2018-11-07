@@ -5,9 +5,12 @@
  */
 package DAO;
 
-import Modelo.Filme;
+import Modelo.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -36,6 +39,31 @@ public class FIlmeDAO extends ExecuteSQL{
             
         } catch (Exception e) {
             return e.getMessage();
+        }
+    }
+    
+    //Capturar o DVD
+    public List<Filme> CapturarFilme(int cod) {
+        String sql = "select * from filme,dvd where dvd.situacao = 'Disponivel' "
+                + "and filme.idfilme" + cod + " ";
+        List<Filme> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    Filme a = new Filme();
+                    a.setCodigo(rs.getInt(1));
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 }
