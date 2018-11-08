@@ -1,5 +1,6 @@
 package DAO;
 
+import Modelo.*;
 import Modelo.Funcionario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,6 +39,32 @@ public class FuncionarioDAO extends ExecuteSQL {
             e.getMessage();
         }
         return finalResult;
+    }
+    
+    
+    
+    public String Inserir_Funcionario(Funcionario a) {
+        String sql = "insert into funcionario values(0,?,?,?)";
+        
+        try {
+           
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            
+            ps.setString(1, a.getNome());
+            ps.setString(2, a.getLogin());
+            ps.setString(3, a.getSenha());
+            
+            
+            if (ps.executeUpdate() > 0) {
+                return "Inserido com sucesso";
+            }else {
+                return "Erro ao inserir";
+            }
+            
+            
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
     
 }

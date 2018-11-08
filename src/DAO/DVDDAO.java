@@ -66,4 +66,31 @@ public class DVDDAO extends ExecuteSQL {
     }
     
     
+    
+    public String Inserir_DVD(DVD a) {
+        String sql = "insert into dvd values(0,?,?,?,?)";
+        
+        try {
+           
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            
+            ps.setInt(1, a.getCod_filme());
+            ps.setDouble(2, a.getPreco());
+            ps.setString(3, a.getData_compra());
+            ps.setString(4, a.getSituacao());
+            
+            
+            if (ps.executeUpdate() > 0) {
+                return "Inserido com sucesso";
+            }else {
+                return "Erro ao inserir";
+            }
+            
+            
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+    
+    
 }

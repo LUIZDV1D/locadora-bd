@@ -144,7 +144,7 @@ public class ClassificacaoDAO extends ExecuteSQL {
     
     
     public List<Classificacao> ConsultarCodigoClassificacao(String nome) {
-        String sql = "select idcclassificacao from classificacao where nome = '" + nome + "'";
+        String sql = "select idclassificacao from classificacao where nome = '" + nome + "'";
         List<Classificacao> lista = new ArrayList<>();
         
         try {
@@ -161,6 +161,36 @@ public class ClassificacaoDAO extends ExecuteSQL {
             } else {
                 return null;
             }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    
+    //Listar os categoria   
+    public List<Classificacao> ListarClassificacao() {
+        String sql = "select idclassificacao,nome,preco from classificacao";
+        List<Classificacao> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (ps != null) {
+                while (rs.next()) {                    
+                    Classificacao a = new Classificacao();
+                    a.setCodigo(rs.getInt(1));
+                    a.setNome(rs.getString(2));
+                    a.setPreco(rs.getDouble(3));
+                    
+                    lista.add(a);
+                }
+                
+                return lista;
+            }else {
+                return null;
+            }
+            
         } catch (Exception e) {
             return null;
         }

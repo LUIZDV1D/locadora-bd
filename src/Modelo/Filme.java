@@ -7,7 +7,7 @@ package Modelo;
 public class Filme {
     private int codigo;
     private String titulo;
-    private int ano;
+    private String ano;
     private String duracao;
     private int cod_categoria;
     private int cod_classificacao;
@@ -29,12 +29,13 @@ public class Filme {
         this.titulo = titulo;
     }
 
-    public int getAno() {
+    public String getAno() {
         return ano;
     }
 
-    public void setAno(int ano) {
+    public void setAno(String ano) {
         this.ano = ano;
+
     }
 
     public String getDuracao() {

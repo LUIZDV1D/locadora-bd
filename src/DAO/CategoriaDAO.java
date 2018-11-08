@@ -94,4 +94,97 @@ public class CategoriaDAO extends ExecuteSQL {
         }
     }
     
+    
+    
+    //Listar os categoria   
+    public List<Categoria> ListarCategoria() {
+        String sql = "select idcategoria,nome from categoria";
+        List<Categoria> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (ps != null) {
+                while (rs.next()) {                    
+                    Categoria a = new Categoria();
+                    a.setCodigo(rs.getInt(1));
+                    a.setNome(rs.getString(2));
+                    
+                    lista.add(a);
+                }
+                
+                return lista;
+            }else {
+                return null;
+            }
+            
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    
+    //Pesquisar por Nome
+    public List<Categoria> Pesquisar_Nome_Categoria(String nome) {
+        String sql = "select idcategoria, nome "
+                + "from categoria where nome Like '"+ nome + "%'";
+        List<Categoria> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (ps != null) {
+                while (rs.next()) {                    
+                    Categoria a = new Categoria();
+                    a.setCodigo(rs.getInt(1));
+                    a.setNome(rs.getString(2));
+                    
+                    lista.add(a);
+                }
+                
+                return lista;
+            }else {
+                return null;
+            }
+            
+        } catch (Exception e) {
+            return null;
+        }
+        
+    }
+    
+    
+    
+    //Pesquisar porn código
+    public List<Categoria> Pesquisar_Cod_Categoria(int cod) {
+        String sql = "select idcliente,nome,RG,CPF,Telefone,Email "
+                + "from cliente where idcliente = '" + cod + "'";
+        List<Categoria> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (ps != null) {
+                while (rs.next()) {                    
+                    Categoria a = new Categoria();
+                    a.setCodigo(rs.getInt(1));
+                    a.setNome(rs.getString(2));
+                    
+                    lista.add(a);
+                }
+                
+                return lista;
+            }else {
+                return null;
+            }
+            
+        } catch (Exception e) {
+            return null;
+        }
+        
+    }
+    
 }

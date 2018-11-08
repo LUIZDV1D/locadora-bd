@@ -9,6 +9,7 @@ import Modelo.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,13 @@ public class FIlmeDAO extends ExecuteSQL{
         try {
            
             PreparedStatement ps = getCon().prepareStatement(sql);
+            
+            ps.setString(1, a.getTitulo());
+            ps.setString(2, a.getAno());
+            ps.setString(3, a.getDuracao());
+            ps.setInt(4, a.getCod_categoria());
+            ps.setInt(5, a.getCod_classificacao());
+            ps.setString(6, a.getCapa());
             
             
             if (ps.executeUpdate() > 0) {
@@ -63,6 +71,54 @@ public class FIlmeDAO extends ExecuteSQL{
                 return null;
             }
         } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    
+    public List<Filme> ListarComboFilme() {
+        String sql = "select titulo from filme order by titulo asc";
+        List<Filme> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    Filme a = new Filme();
+                    a.setTitulo(rs.getString(1));
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    
+    public List<Filme> ConsultarCodigoFilme(String nome) {
+        String sql = "select idfilme from filme where titulo = '" + nome + "'";
+        List<Filme> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    Filme a = new Filme();
+                    a.setCodigo(rs.getInt(1));
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
             return null;
         }
     }

@@ -90,7 +90,8 @@ public class ClienteDAO extends ExecuteSQL {
     
     //Pesquisar por Nome
     public List<Cliente> Pesquisar_Nome_Cliente(String nome) {
-        String sql = "select idcliente,nome,RG,CPF,Telefone,Email" + "from cliente where nome Like '"+ nome + "%'";
+        String sql = "select idcliente, nome, rg, cpf, telefone, email "
+                + "from cliente where nome Like '"+ nome + "%'";
         List<Cliente> lista = new ArrayList<>();
         
         try {
@@ -124,7 +125,8 @@ public class ClienteDAO extends ExecuteSQL {
     
     //Pesquisar porn código
     public List<Cliente> Pesquisar_Cod_Cliente(int cod) {
-        String sql = "select idcliente,nome,RG,CPF,Telefone,Email" + "from cliente where idcliente = '" + cod + "'";
+        String sql = "select idcliente,nome,rg,cpf,telefone,email "
+                + "from cliente where idcliente = '" + cod + "'";
         List<Cliente> lista = new ArrayList<>();
         
         try {

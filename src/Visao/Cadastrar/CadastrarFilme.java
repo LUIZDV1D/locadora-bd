@@ -9,12 +9,19 @@ import DAO.*;
 import DAO.Conexao;
 import Modelo.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 /**
@@ -29,8 +36,8 @@ public class CadastrarFilme extends javax.swing.JFrame {
     public CadastrarFilme() {
         initComponents();
         setLocationRelativeTo(this);
-        AtualizaComboCategoria();
         AtualizaComboClassificacao();
+        AtualizaComboCategoria();
     }
     
     
@@ -39,7 +46,6 @@ public class CadastrarFilme extends javax.swing.JFrame {
         CategoriaDAO sql = new CategoriaDAO(con);
         List<Categoria> lista = new ArrayList<>();
         lista = sql.ListarComboCategoria();
-        comboCate.addItem("");
         
         for (Categoria b : lista) {
             comboCate.addItem(b.getNome());
@@ -53,7 +59,6 @@ public class CadastrarFilme extends javax.swing.JFrame {
         ClassificacaoDAO sql = new ClassificacaoDAO(con);
         List<Classificacao> lista2 = new ArrayList<>();
         lista2 = sql.ListarComboClassificacao();
-        comboClas.addItem("");
         
         for (Classificacao c : lista2) {
             comboClas.addItem(c.getNome());
@@ -85,7 +90,6 @@ public class CadastrarFilme extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         titFilme = new javax.swing.JTextField();
-        anoF = new com.toedter.calendar.JDateChooser();
         idCate = new javax.swing.JTextField();
         idClas = new javax.swing.JTextField();
         nCapa = new javax.swing.JTextField();
@@ -96,6 +100,7 @@ public class CadastrarFilme extends javax.swing.JFrame {
         comboClas = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         lbCapa = new javax.swing.JLabel();
+        anoF = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -191,12 +196,14 @@ public class CadastrarFilme extends javax.swing.JFrame {
         }
         duracF.setText("000:00");
 
+        comboCate.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "selecione um item..." }));
         comboCate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboCateActionPerformed(evt);
             }
         });
 
+        comboClas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "selecione um item..." }));
         comboClas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboClasActionPerformed(evt);
@@ -206,6 +213,12 @@ public class CadastrarFilme extends javax.swing.JFrame {
         jLabel9.setText("CAPA 270 x 190");
 
         lbCapa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/DVD_VIDEO_logo.png"))); // NOI18N
+
+        try {
+            anoF.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -226,8 +239,8 @@ public class CadastrarFilme extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(anoF, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(109, 109, 109)
+                        .addComponent(anoF, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(140, 140, 140)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(duracF))
@@ -268,24 +281,22 @@ public class CadastrarFilme extends javax.swing.JFrame {
                         .addComponent(jLabel9)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel3)
                                     .addComponent(titFilme, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(anoF, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(28, 28, 28)
-                                        .addComponent(jLabel4))))
-                            .addGroup(layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(anoF, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(24, 24, 24))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(61, 61, 61)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(duracF, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8))))
-                        .addGap(18, 18, 18)
+                                    .addComponent(jLabel8))
+                                .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(idCate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -323,26 +334,46 @@ public class CadastrarFilme extends javax.swing.JFrame {
             foto.showOpenDialog(this);
             
             String a = "" + foto.getSelectedFile().getName();
+            String d = "" + foto.getSelectedFile();
             nCapa.setText(a);
-            lbCapa.setIcon(new ImageIcon
-                    (diretorio+nCapa.getText()+"/"));
+            
+            
+            //Mover IMG
+            FileInputStream origem; 
+            FileOutputStream destino;
+            FileChannel fcOrigem;
+            FileChannel fcDestino;
+            origem = new FileInputStream(""+d);//arquivo que você quer copiar
+            destino = new FileOutputStream(home+"/Video Locadora/pictures/"+a);//onde irá ficar a copia do aquivo
+            fcOrigem = origem.getChannel();
+            fcDestino = destino.getChannel();
+            fcOrigem.transferTo(0, fcOrigem.size(), fcDestino);//copiando o arquivo e salvando no diretório que você escolheu
+            origem.close();
+            destino.close();
+            
+            
+            lbCapa.setIcon(new ImageIcon(diretorio+nCapa.getText()));
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Não foi possível carregar capa");
         }
+        
     }//GEN-LAST:event_btnCapaActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String titulo = titFilme.getText();
-        String ano = anoF.getDateFormatString();
+        String ano = anoF.getText();
         String duracao = duracF.getText();
         String idC = idCate.getText();
         String idCla = idClas.getText();
         String ncapa = nCapa.getText();
+        int cl = comboClas.getSelectedIndex();
+        int ct = comboCate.getSelectedIndex();
         
         if (titulo.equals("") || ano.equals("") || duracao.equals("") || idC.equals("")
-                || idCla.equals("") || ncapa.equals("")) {
+                || idCla.equals("") || ncapa.equals("") || cl == 0 || ct == 0) {
             
-            JOptionPane.showMessageDialog(null, "Nenhum campo está vazio", 
+            JOptionPane.showMessageDialog(null, "Nenhum campo pode está vazio", 
                     "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
         } else {
             Connection con = Conexao.AbrirConexao();
@@ -350,8 +381,7 @@ public class CadastrarFilme extends javax.swing.JFrame {
             Filme a = new Filme();
             
             a.setTitulo(titulo);
-            int Ano = Integer.parseInt(ano);
-            a.setAno(Ano);
+            a.setAno(ano);
             a.setDuracao(duracao);
             int IDC = Integer.parseInt(idC);
             a.setCod_categoria(IDC);
@@ -442,7 +472,7 @@ public class CadastrarFilme extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.toedter.calendar.JDateChooser anoF;
+    private javax.swing.JFormattedTextField anoF;
     private javax.swing.JButton btnCapa;
     private javax.swing.JComboBox<String> comboCate;
     private javax.swing.JComboBox<String> comboClas;

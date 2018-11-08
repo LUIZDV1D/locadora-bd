@@ -5,6 +5,11 @@
  */
 package Visao.Cadastrar;
 
+import DAO.*;
+import Modelo.*;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aluno
@@ -35,10 +40,10 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        nomeFu = new javax.swing.JTextField();
+        logFu = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        senhaFu = new javax.swing.JPasswordField();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -80,13 +85,13 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
 
         jTextField1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
 
-        jTextField2.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        nomeFu.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
 
-        jTextField3.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        logFu.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/pass_key.png"))); // NOI18N
 
-        jPasswordField1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        senhaFu.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -95,6 +100,11 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
 
         jButton2.setText("Cadastrar");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Cancelar");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -138,9 +148,9 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
                 .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2)
-                    .addComponent(jTextField3)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
+                    .addComponent(nomeFu)
+                    .addComponent(logFu)
+                    .addComponent(senhaFu, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addGap(75, 75, 75))
@@ -159,14 +169,14 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
                         .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(nomeFu, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(19, 19, 19)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(logFu, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(senhaFu, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)))
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
@@ -175,6 +185,37 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String nome = nomeFu.getText();
+        String login = logFu.getText();
+        String senha = senhaFu.getText();
+        
+        if (nome.equals("") || login.equals("") || senha.equals("")) {
+            
+            JOptionPane.showMessageDialog(null, "Nenhum campo está vazio", 
+                    "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
+        } else {
+            Connection con = Conexao.AbrirConexao();
+            FuncionarioDAO sql = new FuncionarioDAO(con);
+            Funcionario a = new Funcionario();
+            
+            a.setNome(nome);
+            a.setLogin(login);
+            a.setSenha(senha);
+            
+            
+            sql.Inserir_Funcionario(a);
+            Conexao.FecharConexao(con);
+            
+            nomeFu.setText("");
+            logFu.setText("");
+            senhaFu.setText("");
+            
+            JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso",
+                    "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -223,9 +264,9 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField logFu;
+    private javax.swing.JTextField nomeFu;
+    private javax.swing.JPasswordField senhaFu;
     // End of variables declaration//GEN-END:variables
 }

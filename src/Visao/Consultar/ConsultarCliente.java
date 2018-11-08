@@ -154,8 +154,18 @@ public class ConsultarCliente extends javax.swing.JFrame {
         });
 
         todosc.setText("TODOS");
+        todosc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                todoscActionPerformed(evt);
+            }
+        });
 
         pec.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/pesquisar.jpg"))); // NOI18N
+        pec.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pecActionPerformed(evt);
+            }
+        });
 
         tableC.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -224,7 +234,21 @@ public class ConsultarCliente extends javax.swing.JFrame {
 
     private void penActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penActionPerformed
         PesquisaNome();
+        codcli.setText("");
+        nomecli.setText("");
     }//GEN-LAST:event_penActionPerformed
+
+    private void todoscActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_todoscActionPerformed
+        AtualizaTable();
+        codcli.setText("");
+        nomecli.setText("");
+    }//GEN-LAST:event_todoscActionPerformed
+
+    private void pecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pecActionPerformed
+        PesquisaCod();
+        codcli.setText("");
+        nomecli.setText("");
+    }//GEN-LAST:event_pecActionPerformed
 
     /**
      * @param args the command line arguments

@@ -29,13 +29,19 @@ public class ExcluirCliente extends javax.swing.JFrame {
         ClienteDAO sql = new ClienteDAO(con);
         List<Cliente> lista = new ArrayList<>();
         lista = sql.ListarComboCliente();
-        comboCli.addItem("");
         
         for (Cliente b : lista) {
             comboCli.addItem(b.getNome());
         }
         
         Conexao.FecharConexao(con);
+    }
+     
+     private void VerificaCombo() {
+        if (comboCli.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Selecione um item válido",
+                    "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     public ExcluirCliente() {
@@ -90,6 +96,7 @@ public class ExcluirCliente extends javax.swing.JFrame {
 
         jLabel2.setText("Nome:");
 
+        comboCli.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "selecione um item..." }));
         comboCli.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         comboCli.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -176,12 +183,13 @@ public class ExcluirCliente extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String codigo = idCli.getText();
         String nome = comboCli.getSelectedItem().toString();
+        int n = comboCli.getSelectedIndex();
         
         Connection con = Conexao.AbrirConexao();
         ClienteDAO sql = new ClienteDAO(con);
         Cliente a = new Cliente();
         
-        if (nome.equals("")) {
+        if (n == 0) {
             JOptionPane.showMessageDialog(null, "Nenhum nome selecionado",
                     "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
         } else {
