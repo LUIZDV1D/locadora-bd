@@ -5,6 +5,13 @@
  */
 package Visao.Consultar;
 
+import DAO.*;
+import Modelo.*;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author aluno
@@ -16,6 +23,98 @@ public class ConsultaFuncionario extends javax.swing.JFrame {
      */
     public ConsultaFuncionario() {
         initComponents();
+        setLocationRelativeTo(this);
+        AtualizaTable();
+    }
+    
+    
+    private void AtualizaTable() {
+        Connection con = Conexao.AbrirConexao();
+        FuncionarioDAO bd = new FuncionarioDAO(con);
+        List<Funcionario> lista = new ArrayList<>();
+        lista = bd.ListarFuncionario();
+        DefaultTableModel tbm = 
+                (DefaultTableModel) jTable.getModel();
+        
+        while (tbm.getRowCount() > 0) {            
+            tbm.removeRow(0);
+        }
+        
+        int i = 0;
+        
+        for (Funcionario tab : lista) {
+            tbm.addRow(new String[i]);
+            jTable.setValueAt(tab.getCod(), i, 0);
+            jTable.setValueAt(tab.getNome(), i, 1);
+            jTable.setValueAt(tab.getLogin(), i, 2);
+            jTable.setValueAt(tab.getSenha(), i, 3);
+            i++;
+        }
+        
+        Conexao.FecharConexao(con);
+    }
+    
+    
+    
+    private void PesquisaNome() {
+        
+        String nome = nomeFu.getText();
+        
+        Connection con = Conexao.AbrirConexao();
+        FuncionarioDAO bd = new FuncionarioDAO(con);
+        List<Funcionario> lista = new ArrayList<>();
+        lista = bd.Pesquisar_Nome_Funcionario(nome);
+        DefaultTableModel tbm = 
+                (DefaultTableModel) jTable.getModel();
+        
+        while (tbm.getRowCount() > 0) {            
+            tbm.removeRow(0);
+        }
+        
+        int i = 0;
+        
+        for (Funcionario tab : lista) {
+            tbm.addRow(new String[i]);
+            jTable.setValueAt(tab.getCod(), i, 0);
+            jTable.setValueAt(tab.getNome(), i, 1);
+            jTable.setValueAt(tab.getLogin(), i, 2);
+            jTable.setValueAt(tab.getSenha(), i, 3);
+            i++;
+        }
+        
+        Conexao.FecharConexao(con);
+    }
+    
+    
+    
+    private void PesquisaCod() {
+        
+        String codigo = codFu.getText();
+        int cod = Integer.parseInt(codigo);
+        
+        Connection con = Conexao.AbrirConexao();
+        FuncionarioDAO bd = new FuncionarioDAO(con);
+        List<Funcionario> lista = new ArrayList<>();
+        lista = bd.Pesquisar_Cod_Funcionario(cod);
+        DefaultTableModel tbm = 
+                (DefaultTableModel) jTable.getModel();
+        
+        while (tbm.getRowCount() > 0) {            
+            tbm.removeRow(0);
+        }
+        
+        int i = 0;
+        
+        for (Funcionario tab : lista) {
+            tbm.addRow(new String[i]);
+            jTable.setValueAt(tab.getCod(), i, 0);
+            jTable.setValueAt(tab.getNome(), i, 1);
+            jTable.setValueAt(tab.getLogin(), i, 2);
+            jTable.setValueAt(tab.getSenha(), i, 3);
+            i++;
+        }
+        
+        Conexao.FecharConexao(con);
     }
 
     /**
@@ -29,13 +128,13 @@ public class ConsultaFuncionario extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        nomeFu = new javax.swing.JTextField();
+        codFu = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -44,20 +143,43 @@ public class ConsultaFuncionario extends javax.swing.JFrame {
         jLabel2.setText("Pesquisa por código:");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/pesquisar.jpg"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("TODOS");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/pesquisar.jpg"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "Código", "Nome", "Login", "Senha"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,13 +189,13 @@ public class ConsultaFuncionario extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nomeFu, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(123, 123, 123)
                 .addComponent(jLabel2)
                 .addGap(29, 29, 29)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(codFu, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47)
@@ -95,8 +217,8 @@ public class ConsultaFuncionario extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(codFu, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nomeFu, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -105,6 +227,24 @@ public class ConsultaFuncionario extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        PesquisaNome();
+        codFu.setText("");
+        nomeFu.setText("");
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        PesquisaCod();
+        codFu.setText("");
+        nomeFu.setText("");
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        AtualizaTable();
+        codFu.setText("");
+        nomeFu.setText("");
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -142,14 +282,14 @@ public class ConsultaFuncionario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField codFu;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTable jTable;
+    private javax.swing.JTextField nomeFu;
     // End of variables declaration//GEN-END:variables
 }

@@ -196,4 +196,69 @@ public class ClassificacaoDAO extends ExecuteSQL {
         }
     }
     
+    
+    
+    //Pesquisar por Nome
+    public List<Classificacao> Pesquisar_Nome_Classificacao(String nome) {
+        String sql = "select idclassificacao,nome,preco "
+                + "from classificacao where nome Like '"+ nome + "%'";
+        List<Classificacao> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (ps != null) {
+                while (rs.next()) {                    
+                    Classificacao a = new Classificacao();
+                    a.setCodigo(rs.getInt(1));
+                    a.setNome(rs.getString(2));
+                    a.setPreco(rs.getDouble(3));
+                    
+                    lista.add(a);
+                }
+                
+                return lista;
+            }else {
+                return null;
+            }
+            
+        } catch (Exception e) {
+            return null;
+        }
+        
+    }
+    
+    
+    
+    //Pesquisar porn código
+    public List<Classificacao> Pesquisar_Cod_Classificacao(int cod) {
+        String sql = "select idclassificacao,nome,preco "
+                + "from classificacao where idclassificacao = '" + cod + "'";
+        List<Classificacao> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (ps != null) {
+                while (rs.next()) {                    
+                    Classificacao a = new Classificacao();
+                    a.setCodigo(rs.getInt(1));
+                    a.setNome(rs.getString(2));
+                    
+                    lista.add(a);
+                }
+                
+                return lista;
+            }else {
+                return null;
+            }
+            
+        } catch (Exception e) {
+            return null;
+        }
+        
+    }
+    
 }

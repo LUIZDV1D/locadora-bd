@@ -159,8 +159,8 @@ public class CategoriaDAO extends ExecuteSQL {
     
     //Pesquisar porn código
     public List<Categoria> Pesquisar_Cod_Categoria(int cod) {
-        String sql = "select idcliente,nome,RG,CPF,Telefone,Email "
-                + "from cliente where idcliente = '" + cod + "'";
+        String sql = "select idcategoria,nome "
+                + "from categoria where idcategoria = '" + cod + "'";
         List<Categoria> lista = new ArrayList<>();
         
         try {
@@ -184,7 +184,26 @@ public class CategoriaDAO extends ExecuteSQL {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    
+    
+    public String Excluir_Categoria(Categoria a) {
+        String sql = "delete from categoria where idcategoria = ? and nome = ? ";
         
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ps.setInt(1, a.getCodigo());
+            ps.setString(2, a.getNome());
+            
+            if (ps.executeUpdate() > 0) {
+                return "Excluido com sucesso";
+            } else {
+                return "Erro ao excluir";
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
     
 }

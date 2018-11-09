@@ -52,6 +52,64 @@ public class ConsultaClassificacao extends javax.swing.JFrame {
         
         Conexao.FecharConexao(con);
     }
+    
+    
+    private void PesquisaNome() {
+        
+        String nome = nomeCl.getText();
+        
+        Connection con = Conexao.AbrirConexao();
+        ClassificacaoDAO bd = new ClassificacaoDAO(con);
+        List<Classificacao> lista = new ArrayList<>();
+        lista = bd.Pesquisar_Nome_Classificacao(nome);
+        DefaultTableModel tbm = 
+                (DefaultTableModel) jTable.getModel();
+        
+        while (tbm.getRowCount() > 0) {            
+            tbm.removeRow(0);
+        }
+        
+        int i = 0;
+        
+        for (Classificacao tab : lista) {
+            tbm.addRow(new String[i]);
+            jTable.setValueAt(tab.getCodigo(), i, 0);
+            jTable.setValueAt(tab.getNome(), i, 1);
+            i++;
+        }
+        
+        Conexao.FecharConexao(con);
+    }
+    
+    
+    
+    private void PesquisaCod() {
+        
+        String codigo = codCl.getText();
+        int cod = Integer.parseInt(codigo);
+        
+        Connection con = Conexao.AbrirConexao();
+        ClassificacaoDAO bd = new ClassificacaoDAO(con);
+        List<Classificacao> lista = new ArrayList<>();
+        lista = bd.Pesquisar_Cod_Classificacao(cod);
+        DefaultTableModel tbm = 
+                (DefaultTableModel) jTable.getModel();
+        
+        while (tbm.getRowCount() > 0) {            
+            tbm.removeRow(0);
+        }
+        
+        int i = 0;
+        
+        for (Classificacao tab : lista) {
+            tbm.addRow(new String[i]);
+            jTable.setValueAt(tab.getCodigo(), i, 0);
+            jTable.setValueAt(tab.getNome(), i, 1);
+            i++;
+        }
+        
+        Conexao.FecharConexao(con);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -79,10 +137,25 @@ public class ConsultaClassificacao extends javax.swing.JFrame {
         jLabel2.setText("Pesquisa por código:");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/pesquisar.jpg"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("TODOS");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/pesquisar.jpg"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -91,7 +164,15 @@ public class ConsultaClassificacao extends javax.swing.JFrame {
             new String [] {
                 "Código", "Nome", "Preço"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -140,6 +221,24 @@ public class ConsultaClassificacao extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        PesquisaNome();
+        codCl.setText("");
+        nomeCl.setText("");
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        AtualizaTable();
+        codCl.setText("");
+        nomeCl.setText("");
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        PesquisaCod();
+        codCl.setText("");
+        nomeCl.setText("");
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

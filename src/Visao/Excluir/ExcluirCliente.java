@@ -37,12 +37,6 @@ public class ExcluirCliente extends javax.swing.JFrame {
         Conexao.FecharConexao(con);
     }
      
-     private void VerificaCombo() {
-        if (comboCli.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "Selecione um item válido",
-                    "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
-        }
-    }
 
     public ExcluirCliente() {
         initComponents();

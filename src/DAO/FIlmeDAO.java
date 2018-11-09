@@ -122,4 +122,109 @@ public class FIlmeDAO extends ExecuteSQL{
             return null;
         }
     }
+    
+    
+    //Listar os filme   
+    public List<Filme> ListarFilme() {
+        String sql = "select idfilme,titulo,ano,duracao,idcategoria,idclassificacao from filme";
+        List<Filme> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (ps != null) {
+                while (rs.next()) {                    
+                    Filme a = new Filme();
+                    a.setCodigo(rs.getInt(1));
+                    a.setTitulo(rs.getString(2));
+                    a.setAno(rs.getString(3));
+                    a.setDuracao(rs.getString(4));
+                    a.setCod_categoria(rs.getInt(5));
+                    a.setCod_classificacao(rs.getInt(6));
+                    
+                    lista.add(a);
+                }
+                
+                return lista;
+            }else {
+                return null;
+            }
+            
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    
+    
+    //Pesquisar por Nome
+    public List<Filme> Pesquisar_Nome_Filme(String nome) {
+        String sql = "select idfilme,titulo,ano,duracao,idcategoria,idclassificacao "
+                + "from filme where titulo Like '"+ nome + "%'";
+        List<Filme> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (ps != null) {
+                while (rs.next()) {                    
+                    Filme a = new Filme();
+                    a.setCodigo(rs.getInt(1));
+                    a.setTitulo(rs.getString(2));
+                    a.setAno(rs.getString(3));
+                    a.setDuracao(rs.getString(4));
+                    a.setCod_categoria(rs.getInt(5));
+                    a.setCod_classificacao(rs.getInt(6));
+                    
+                    lista.add(a);
+                }
+                
+                return lista;
+            }else {
+                return null;
+            }
+            
+        } catch (Exception e) {
+            return null;
+        }
+        
+    }
+    
+    
+    
+    //Pesquisar porn código
+    public List<Filme> Pesquisar_Cod_Filme(int cod) {
+        String sql = "select idfilme,titulo,ano,duracao,idcategoria,idclassificacao "
+                + "from filme where idfilme = '" + cod + "'";
+        List<Filme> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (ps != null) {
+                while (rs.next()) {                    
+                    Filme a = new Filme();
+                    a.setCodigo(rs.getInt(1));
+                    a.setTitulo(rs.getString(2));
+                    a.setAno(rs.getString(3));
+                    a.setDuracao(rs.getString(4));
+                    a.setCod_categoria(rs.getInt(5));
+                    a.setCod_classificacao(rs.getInt(6));
+                    
+                    lista.add(a);
+                }
+                
+                return lista;
+            }else {
+                return null;
+            }
+            
+        } catch (Exception e) {
+            return null;
+        }
+        
+    }
 }

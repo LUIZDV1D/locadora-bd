@@ -10,6 +10,7 @@ import Modelo.*;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -56,58 +57,71 @@ public class ConsultaCategoria extends javax.swing.JFrame {
     
     private void PesquisaNome() {
         
-        String nome = nomeCate.getText();
+        if (nomeCate.equals("")) {
+            JOptionPane.showMessageDialog(null, "Nenhum campo está vazio", 
+                    "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
+        } else {
         
-        Connection con = Conexao.AbrirConexao();
-        CategoriaDAO bd = new CategoriaDAO(con);
-        List<Categoria> lista = new ArrayList<>();
-        lista = bd.Pesquisar_Nome_Categoria(nome);
-        DefaultTableModel tbm = 
-                (DefaultTableModel) jTable.getModel();
-        
-        while (tbm.getRowCount() > 0) {            
-            tbm.removeRow(0);
+            String nome = nomeCate.getText();
+
+            Connection con = Conexao.AbrirConexao();
+            CategoriaDAO bd = new CategoriaDAO(con);
+            List<Categoria> lista = new ArrayList<>();
+            lista = bd.Pesquisar_Nome_Categoria(nome);
+            DefaultTableModel tbm = 
+                    (DefaultTableModel) jTable.getModel();
+
+            while (tbm.getRowCount() > 0) {            
+                tbm.removeRow(0);
+            }
+
+            int i = 0;
+
+            for (Categoria tab : lista) {
+                tbm.addRow(new String[i]);
+                jTable.setValueAt(tab.getCodigo(), i, 0);
+                jTable.setValueAt(tab.getNome(), i, 1);
+                i++;
+            }
+
+            Conexao.FecharConexao(con);
         }
-        
-        int i = 0;
-        
-        for (Categoria tab : lista) {
-            tbm.addRow(new String[i]);
-            jTable.setValueAt(tab.getCodigo(), i, 0);
-            jTable.setValueAt(tab.getNome(), i, 1);
-            i++;
-        }
-        
-        Conexao.FecharConexao(con);
     }
     
     
     private void PesquisaCod() {
         
-        String codigo = codCate.getText();
-        int cod = Integer.parseInt(codigo);
+        if (codCate.equals("")) {
+            JOptionPane.showMessageDialog(null, "Nenhum campo está vazio", 
+                    "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
+        } else {
+            
         
-        Connection con = Conexao.AbrirConexao();
-        CategoriaDAO bd = new CategoriaDAO(con);
-        List<Categoria> lista = new ArrayList<>();
-        lista = bd.Pesquisar_Cod_Categoria(cod);
-        DefaultTableModel tbm = 
-                (DefaultTableModel) jTable.getModel();
-        
-        while (tbm.getRowCount() > 0) {            
-            tbm.removeRow(0);
+            String codigo = codCate.getText();
+            int cod = Integer.parseInt(codigo);
+
+            Connection con = Conexao.AbrirConexao();
+            CategoriaDAO bd = new CategoriaDAO(con);
+            List<Categoria> lista = new ArrayList<>();
+            lista = bd.Pesquisar_Cod_Categoria(cod);
+            DefaultTableModel tbm = 
+                    (DefaultTableModel) jTable.getModel();
+
+            while (tbm.getRowCount() > 0) {            
+                tbm.removeRow(0);
+            }
+
+            int i = 0;
+
+            for (Categoria tab : lista) {
+                tbm.addRow(new String[i]);
+                jTable.setValueAt(tab.getCodigo(), i, 0);
+                jTable.setValueAt(tab.getNome(), i, 1);
+                i++;
+            }
+
+            Conexao.FecharConexao(con);
         }
-        
-        int i = 0;
-        
-        for (Categoria tab : lista) {
-            tbm.addRow(new String[i]);
-            jTable.setValueAt(tab.getCodigo(), i, 0);
-            jTable.setValueAt(tab.getNome(), i, 1);
-            i++;
-        }
-        
-        Conexao.FecharConexao(con);
     }
 
     /**
@@ -163,7 +177,15 @@ public class ConsultaCategoria extends javax.swing.JFrame {
             new String [] {
                 "Código", "Nome"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -220,15 +242,20 @@ public class ConsultaCategoria extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       
         PesquisaNome();
         nomeCate.setText("");
         codCate.setText("");
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       
+        
         PesquisaCod();
         nomeCate.setText("");
         codCate.setText("");
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
