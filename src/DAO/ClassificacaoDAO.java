@@ -261,4 +261,24 @@ public class ClassificacaoDAO extends ExecuteSQL {
         
     }
     
+    
+    
+    public String Excluir_Classificacao(Classificacao a) {
+        String sql = "delete from classificacao where idclassificacao = ? and nome = ?";
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ps.setInt(1, a.getCodigo());
+            ps.setString(2, a.getNome());
+            
+            if (ps.executeUpdate() > 0) {
+                return "Excluido com sucesso";
+            } else {
+                return "Erro ao excluir";
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+    
 }

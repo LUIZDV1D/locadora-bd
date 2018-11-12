@@ -196,6 +196,48 @@ public class DVDDAO extends ExecuteSQL {
     }
     
     
+    public String Excluir_DVD(DVD a) {
+        String sql = "delete from dvd where iddvd = ?";
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ps.setInt(1, a.getCodigo());
+            
+            if (ps.executeUpdate() > 0) {
+                return "Excluido com sucesso";
+            } else {
+                return "Erro ao excluir";
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+    
+    
+    
+    public List<DVD> ConsultarCodigoDVD(int cod) {
+        String sql = "select iddvd from dvd where iddvd = '" + cod + "'";
+        List<DVD> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    DVD a = new DVD();
+                    a.setCodigo(rs.getInt(1));
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
     
     
 }

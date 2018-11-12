@@ -421,6 +421,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="codc">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

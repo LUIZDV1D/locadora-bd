@@ -50,10 +50,9 @@ public class FIlmeDAO extends ExecuteSQL{
         }
     }
     
-    //Capturar o DVD
+    //Capturar o filme
     public List<Filme> CapturarFilme(int cod) {
-        String sql = "select * from filme,dvd where dvd.situacao = 'Disponivel' "
-                + "and filme.idfilme" + cod + " ";
+        String sql = "select * from filme idfilme = " + cod + " ";
         List<Filme> lista = new ArrayList<>();
         
         try {
@@ -73,6 +72,29 @@ public class FIlmeDAO extends ExecuteSQL{
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    
+    
+    //Testar filme
+    public boolean testar_Filme(int cod) {
+        boolean Resultado = false;
+        
+        try {
+            String sql = "select * from filme where idfilme = " + cod + "";
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    Resultado = true;
+                }
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        
+        return Resultado;
     }
     
     
@@ -226,5 +248,24 @@ public class FIlmeDAO extends ExecuteSQL{
             return null;
         }
         
+    }
+    
+    
+    public String Excluir_Filme(Filme a) {
+        String sql = "delete from filme where idfilme = ? and titulo = ? ";
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ps.setInt(1, a.getCodigo());
+            ps.setString(2, a.getTitulo());
+            
+            if (ps.executeUpdate() > 0) {
+                return "Excluido com sucesso";
+            } else {
+                return "Erro ao excluir";
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 }
