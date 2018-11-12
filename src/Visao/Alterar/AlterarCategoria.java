@@ -263,8 +263,8 @@ public class AlterarCategoria extends javax.swing.JFrame {
             codc.setText("");
             nomec.setText("");
 
-            JOptionPane.showMessageDialog(null, "Informações atualizadas",
-                "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
+//            JOptionPane.showMessageDialog(null, "Informações atualizadas",
+//                "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
 
         }
     }//GEN-LAST:event_btnAlterarActionPerformed

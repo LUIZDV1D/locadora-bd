@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -260,6 +261,7 @@ public class CategoriaDAO extends ExecuteSQL {
     //Alterar categoria
     public String Alterar_Categoria(Categoria a) {
         String sql = "update categoria set nome = ? where idcategoria = ?";
+        String msg = "";
         
         try {
             PreparedStatement ps = getCon().prepareStatement(sql);
@@ -267,13 +269,19 @@ public class CategoriaDAO extends ExecuteSQL {
             ps.setInt(2, a.getCodigo());
             
             if (ps.executeUpdate() > 0) {
-                return "Atualizado com sucesso";
+                msg = "Atualizado com sucesso";
+                JOptionPane.showMessageDialog(null, "Atualizado com sucesso",
+                        "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                return "Erro ao atualizar";
+                msg = "Erro ao atualizar";
+                JOptionPane.showMessageDialog(null, "Erro ao atualizar",
+                        "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
             return e.getMessage();
         }
+        
+        return msg;
     }
     
 }

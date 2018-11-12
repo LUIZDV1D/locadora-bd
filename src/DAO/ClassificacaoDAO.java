@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -100,6 +101,7 @@ public class ClassificacaoDAO extends ExecuteSQL {
     //Alterar classificacao
     public String Alterar_Classificacao(Classificacao a) {
         String sql = "update classificacao set nome = ?, preco = ? where idclassificacao = ?";
+        String msg = "";
         
         try {
             PreparedStatement ps = getCon().prepareStatement(sql);
@@ -108,13 +110,17 @@ public class ClassificacaoDAO extends ExecuteSQL {
             ps.setInt(3, a.getCodigo());
             
             if (ps.executeUpdate() > 0) {
-                return "Atualizado com sucesso";
+                msg = "Atualizado com sucesso";
+                JOptionPane.showMessageDialog(null, msg, "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                return "Erro ao atualizar";
+                msg = "Erro ao atualizar";
+                JOptionPane.showMessageDialog(null, msg, "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
             return e.getMessage();
         }
+        
+        return msg;
     }
     
     

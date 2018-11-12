@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -52,7 +53,7 @@ public class FIlmeDAO extends ExecuteSQL{
     
     //Capturar o filme
     public List<Filme> CapturarFilme(int cod) {
-        String sql = "select * from filme idfilme = " + cod + " ";
+        String sql = "select * from filme where idfilme =" + cod;
         List<Filme> lista = new ArrayList<>();
         
         try {
@@ -62,7 +63,15 @@ public class FIlmeDAO extends ExecuteSQL{
             if (rs != null) {
                 while (rs.next()) {                    
                     Filme a = new Filme();
+                    
                     a.setCodigo(rs.getInt(1));
+                    a.setTitulo(rs.getString(2));
+                    a.setAno(rs.getString(3));
+                    a.setDuracao(rs.getString(4));
+                    a.setCod_categoria(rs.getInt(5));
+                    a.setCod_classificacao(rs.getInt(6));
+                    a.setCapa(rs.getString(7));
+                    
                     lista.add(a);
                 }
                 return lista;
@@ -96,6 +105,7 @@ public class FIlmeDAO extends ExecuteSQL{
         
         return Resultado;
     }
+    
     
     
     public List<Filme> ListarComboFilme() {
@@ -218,7 +228,7 @@ public class FIlmeDAO extends ExecuteSQL{
     
     //Pesquisar porn código
     public List<Filme> Pesquisar_Cod_Filme(int cod) {
-        String sql = "select idfilme,titulo,ano,duracao,idcategoria,idclassificacao "
+        String sql = "select idfilme,titulo,ano,duracao,idcategoria,idclassificacao,capa "
                 + "from filme where idfilme = '" + cod + "'";
         List<Filme> lista = new ArrayList<>();
         
@@ -235,6 +245,7 @@ public class FIlmeDAO extends ExecuteSQL{
                     a.setDuracao(rs.getString(4));
                     a.setCod_categoria(rs.getInt(5));
                     a.setCod_classificacao(rs.getInt(6));
+                    a.setCapa(rs.getString(7));
                     
                     lista.add(a);
                 }
@@ -267,5 +278,35 @@ public class FIlmeDAO extends ExecuteSQL{
         } catch (Exception e) {
             return e.getMessage();
         }
+    }
+    
+    
+    
+    //Alterar funcionario
+    public String Alterar_Filme(Filme a) {
+        String sql = "update filme set titulo = ?, ano = ?, duracao = ?, capa = ? where idfilme = ?";
+        String msg = "";
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+
+            ps.setString(1, a.getTitulo());
+            ps.setString(2,a.getAno());
+            ps.setString(3,a.getDuracao());
+            ps.setString(4,a.getCapa());
+            ps.setInt(5, a.getCodigo());            
+            
+            if (ps.executeUpdate() > 0) {
+                msg = "Atualizado com sucesso";
+                JOptionPane.showMessageDialog(null, "Atualizado com sucesso",
+                        "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                msg =  "Erro ao atualizar";
+                JOptionPane.showMessageDialog(null, "Erro ao atualizar",
+                        "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return msg;
     }
 }

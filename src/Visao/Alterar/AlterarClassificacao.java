@@ -260,8 +260,8 @@ public class AlterarClassificacao extends javax.swing.JFrame {
             nomec.setText("");
             precoC.setText("");
 
-            JOptionPane.showMessageDialog(null, "Informações atualizadas",
-                "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
+//            JOptionPane.showMessageDialog(null, "Informações atualizadas",
+//                "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
 
         }
     }//GEN-LAST:event_btnAlterarActionPerformed
