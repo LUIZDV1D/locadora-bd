@@ -240,4 +240,58 @@ public class DVDDAO extends ExecuteSQL {
     
     
     
+    //Capturar o dvd
+    public List<DVD> CapturarDVD(int cod) {
+        String sql = "select * from dvd where iddvd =" + cod + " ";
+        List<DVD> lista = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    DVD a = new DVD();
+                    a.setCodigo(rs.getInt(1));
+                    a.setCod_filme(rs.getInt(2));
+                    a.setPreco(rs.getDouble(3));
+                    a.setData_compra(rs.getString(4));
+                    a.setSituacao(rs.getString(5));
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    
+    
+    
+    //Alterar dvd
+    public String Alterar_DVD(DVD a) {
+        String sql = "update dvd set preco_compra = ?, data_compra = ?, situacao = ? where iddvd = ?";
+        
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ps.setDouble(1, a.getPreco());
+            ps.setString(2, a.getData_compra());
+            ps.setString(3, a.getSituacao());
+            ps.setInt(4, a.getCodigo());
+            
+            if (ps.executeUpdate() > 0) {
+                return "Atualizado com sucesso";
+            } else {
+                return "Erro ao atualizar";
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+    
+    
+    
 }
