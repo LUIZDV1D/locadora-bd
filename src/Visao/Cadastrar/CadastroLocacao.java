@@ -5,12 +5,15 @@
  */
 package Visao.Cadastrar;
 
-import DAO.ClienteDAO;
-import DAO.Conexao;
+import DAO.*;
 import Modelo.*;
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,6 +27,68 @@ public class CadastroLocacao extends javax.swing.JFrame {
     public CadastroLocacao() {
         initComponents();
         setLocationRelativeTo(this);
+        AtualizaCombo();
+        AtualizaDate();
+    }
+    
+    
+    private void InserirDados(int cod) {
+        
+        String home = System.getProperty("user.home");
+        String diretorio = home+"/Video Locadora/pictures/";
+        
+        Connection con = Conexao.AbrirConexao();
+        DVDDAO dvd = new DVDDAO(con);
+        FIlmeDAO filme = new FIlmeDAO(con);
+        List<DVD> listaDVD = new ArrayList<>();
+        List<Filme> listaFilme = new ArrayList<>();
+        listaDVD = dvd.ListarCodFilme(cod);
+        for (DVD a : listaDVD) {
+            int codigo = a.getCod_filme();
+            listaFilme = filme.Pesquisar_Cod_Filme(codigo);
+        }
+        for (Filme a : listaFilme) {
+            titFilme.setText(a.getTitulo());
+            catDVD.setText("" + a.getCod_categoria());
+            claDVD.setText("" + a.getCod_classificacao());
+            icoDVD.setIcon(new ImageIcon(home+a.getCapa()));
+        }
+        
+        ClassificacaoDAO cla = new ClassificacaoDAO(con);
+        List<Classificacao> listaCLA = new ArrayList<>();
+        String b = claDVD.getText();
+        int codigo = Integer.parseInt(b);
+        // listaCLA = cla.ListarPrecoClassificacao(codigo);
+        for(Classificacao a : listaCLA) {
+            double preco = a.getPreco();
+            valADVD.setText("" + preco + "0");
+        }
+    }
+    
+    
+    
+    private void AtualizaCombo() {
+        Connection con = Conexao.AbrirConexao();
+        ClienteDAO sql = new ClienteDAO(con);
+        List<Cliente> lista = new ArrayList<>();
+        lista = sql.ListarComboCliente();
+        
+        for (Cliente b : lista) {
+            comboCli.addItem(b.getNome());
+        }
+        
+        Conexao.FecharConexao(con);
+    }
+    
+    
+    
+    public void AtualizaDate() {
+        
+        Date date = new Date();
+        SimpleDateFormat data = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat hora = new SimpleDateFormat("hh:mm");
+        dlDVD.setText(data.format(date));
+        horaL.setText(hora.format(date));
     }
 
     /**
@@ -40,10 +105,10 @@ public class CadastroLocacao extends javax.swing.JFrame {
         btnOk = new javax.swing.JButton();
         codigoDVD = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        horaL = new javax.swing.JFormattedTextField();
         icoDVD = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        titDVD = new javax.swing.JTextField();
+        titFilme = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         catDVD = new javax.swing.JTextField();
         claDVD = new javax.swing.JTextField();
@@ -56,10 +121,10 @@ public class CadastroLocacao extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         dlDVD = new javax.swing.JFormattedTextField();
         jLabel10 = new javax.swing.JLabel();
-        ddDVD = new com.toedter.calendar.JDateChooser();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        dataD = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,10 +138,13 @@ public class CadastroLocacao extends javax.swing.JFrame {
             }
         });
 
+        codigoDVD.setEditable(false);
+
         jLabel2.setText("Horas:");
 
+        horaL.setEditable(false);
         try {
-            jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
+            horaL.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -85,16 +153,34 @@ public class CadastroLocacao extends javax.swing.JFrame {
 
         jLabel4.setText("Título:");
 
+        titFilme.setEditable(false);
+
         jLabel5.setText("Categoria:");
+
+        catDVD.setEditable(false);
+
+        claDVD.setEditable(false);
 
         jLabel6.setText("Classificação:");
 
+        valADVD.setEditable(false);
+
         jLabel7.setText("Valor de Aluguel:");
+
+        codCli.setEditable(false);
 
         jLabel8.setText("Cliente:");
 
+        comboCli.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "selecione um item..." }));
+        comboCli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboCliActionPerformed(evt);
+            }
+        });
+
         jLabel9.setText("Data de Locação:");
 
+        dlDVD.setEditable(false);
         try {
             dlDVD.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -108,6 +194,11 @@ public class CadastroLocacao extends javax.swing.JFrame {
 
         jButton3.setText("Cadastrar");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Cancelar");
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -137,7 +228,7 @@ public class CadastroLocacao extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(24, 24, 24)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(titDVD, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(titFilme, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(catDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -148,27 +239,24 @@ public class CadastroLocacao extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel10)
                                 .addGap(18, 18, 18)
-                                .addComponent(ddDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(dataD, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(49, 49, 49)
-                                .addComponent(jLabel1)
-                                .addGap(29, 29, 29)
-                                .addComponent(codDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(159, 159, 159)
-                                .addComponent(codigoDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(46, 46, 46)
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(18, 18, 18)
-                                .addComponent(dlDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(dlDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(jLabel1)
+                        .addGap(29, 29, 29)
+                        .addComponent(codDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(159, 159, 159)
+                        .addComponent(codigoDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(horaL, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(icoDVD)
                 .addContainerGap())
@@ -177,7 +265,7 @@ public class CadastroLocacao extends javax.swing.JFrame {
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(189, 189, 189)
+                .addGap(217, 217, 217)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(79, 79, 79))
         );
@@ -189,7 +277,7 @@ public class CadastroLocacao extends javax.swing.JFrame {
                     .addComponent(icoDVD)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(horaL, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
                             .addComponent(codDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -197,7 +285,7 @@ public class CadastroLocacao extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(titDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(titFilme, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -212,13 +300,16 @@ public class CadastroLocacao extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addComponent(codCli, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboCli, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ddDVD, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(dlDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel9)
-                                .addComponent(jLabel10)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(dlDVD, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel10)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(dataD, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -231,8 +322,91 @@ public class CadastroLocacao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        
+        String pesquisa = codDVD.getText();
+        Connection con = Conexao.AbrirConexao();
+        if (pesquisa.equals("")) {
+            JOptionPane.showMessageDialog(null, "Digite o código do DVD",
+                    "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
+        } else {
+            
+            DVDDAO sql = new DVDDAO(con);
+            int cod = Integer.parseInt(pesquisa);
+            if (sql.Testar_DVD(cod) == false) {
+                JOptionPane.showMessageDialog(null, "Código do DVD não encontrado",
+                        "Vídeo Locadora", JOptionPane.ERROR_MESSAGE);
+                codDVD.setText("");
+                titFilme.setText("");
+                valADVD.setText("");
+                catDVD.setText("");
+                claDVD.setText("");
+                icoDVD.setIcon(new ImageIcon(""));
+                codigoDVD.setText("");
+            } else if (sql.Testar_Situacao(cod) == false) {
+                JOptionPane.showMessageDialog(null, "O DVD de código ("+cod+")"
+                        + " está emprestado", "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
+                
+                codDVD.setText("");
+                titFilme.setText("");
+                valADVD.setText("");
+                catDVD.setText("");
+                claDVD.setText("");
+                icoDVD.setIcon(new ImageIcon(""));
+                codigoDVD.setText("");
+            } else {
+                InserirDados(cod);
+                codigoDVD.setText(pesquisa);
+                codDVD.setText("");
+            }
+        }
+        Conexao.FecharConexao(con);
     }//GEN-LAST:event_btnOkActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String dvd = codigoDVD.getText();
+        String cliente = codCli.getText();
+        String horario = horaL.getText();
+        String aluguel = dlDVD.getText();
+        if (dvd.equals("") || cliente.equals("") || dataD.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Nenhum campo pode está vazio",
+                    "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
+        } else {
+            String devolucao = new SimpleDateFormat("dd/MM/yyyy").format(dataD.getDate());
+            Connection con = Conexao.AbrirConexao();
+            AluguelDAO sql = new AluguelDAO(con);
+            int coddvd = Integer.parseInt(dvd);
+            int codcli = Integer.parseInt(cliente);
+            Aluguel a = new Aluguel();
+            a.setCoddvd(coddvd);
+            a.setCodcliente(codcli);
+            a.setHorario(horario);
+            a.setData_aluguel(aluguel);
+            a.setData_devolucao(devolucao);
+            sql.Inserir_Aluguel(a);
+            String situacao = "Emprestado";
+            sql.Atualizar_Situacao(situacao, coddvd);
+            Conexao.FecharConexao(con);
+            
+            JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso",
+                    "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void comboCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCliActionPerformed
+        Connection con = Conexao.AbrirConexao();
+        ClienteDAO sql = new ClienteDAO(con);
+        List<Cliente> lista = new ArrayList<>();
+        String nome = comboCli.getSelectedItem().toString();
+        
+        lista = sql.ConsultarCodigoCliente(nome);
+        
+        for (Cliente b : lista) {
+            int a = b.getCodigo();
+            codCli.setText("" + a);
+        }
+        
+        Conexao.FecharConexao(con);
+    }//GEN-LAST:event_comboCliActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,13 +451,13 @@ public class CadastroLocacao extends javax.swing.JFrame {
     private javax.swing.JTextField codDVD;
     private javax.swing.JTextField codigoDVD;
     private javax.swing.JComboBox<String> comboCli;
-    private com.toedter.calendar.JDateChooser ddDVD;
+    private com.toedter.calendar.JDateChooser dataD;
     private javax.swing.JFormattedTextField dlDVD;
+    private javax.swing.JFormattedTextField horaL;
     private javax.swing.JLabel icoDVD;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -293,7 +467,7 @@ public class CadastroLocacao extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField titDVD;
+    private javax.swing.JTextField titFilme;
     private javax.swing.JTextField valADVD;
     // End of variables declaration//GEN-END:variables
 }

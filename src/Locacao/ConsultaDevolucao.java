@@ -5,6 +5,14 @@
  */
 package Locacao;
 
+import DAO.ClienteDAO;
+import DAO.Conexao;
+import Modelo.Cliente;
+import Modelo.Listar;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Giovanna
@@ -17,6 +25,21 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
     public ConsultaDevolucao() {
         initComponents();
         setLocationRelativeTo(this);
+        AtualizaCombo();
+    }
+    
+    
+    private void AtualizaCombo() {
+        Connection con = Conexao.AbrirConexao();
+        ClienteDAO sql = new ClienteDAO(con);
+        List<Cliente> lista = new ArrayList<>();
+        lista = sql.ListarComboCliente();
+        
+        for (Cliente b : lista) {
+            comboCli.addItem(b.getNome());
+        }
+        
+        Conexao.FecharConexao(con);
     }
 
     /**
@@ -31,7 +54,7 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboCli = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -43,9 +66,16 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
                 "Código", "Cliente", "DVD", "Horário", "Locação", "Devolução"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setText("Cliente:");
+
+        comboCli.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "selecione um item..." }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -59,7 +89,7 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
                 .addGap(235, 235, 235)
                 .addComponent(jLabel1)
                 .addGap(45, 45, 45)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(comboCli, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -68,7 +98,7 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
                 .addContainerGap(24, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboCli, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -76,6 +106,19 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        Integer linha = jTable1.getSelectedRow();
+        Integer idaluguel = (Integer) jTable1.getValueAt(linha, 0);
+        Integer idcliente = (Integer) jTable1.getValueAt(linha, 1);
+        Integer iddvd = (Integer) jTable1.getValueAt(linha, 2);
+        Listar a = new Listar();
+        a.setCoddvd(iddvd);
+        a.setCodaluguel(idaluguel);
+        a.setCodcliente(idcliente);
+        
+        new EfetuarDevolucao().setVisible(true);
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -113,7 +156,7 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> comboCli;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

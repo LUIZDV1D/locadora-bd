@@ -9,6 +9,7 @@ import Modelo.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -284,6 +285,31 @@ public class ClassificacaoDAO extends ExecuteSQL {
             }
         } catch (Exception e) {
             return e.getMessage();
+        }
+    }
+    
+    
+    
+    public List<Classificacao> ListarPrecoClassificacao(int cod) {
+        String sql = "select preco from classificacao where idclassificacao = " + cod + " ";
+        List<Classificacao> lista = new ArrayList<>();
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    Classificacao a = new Classificacao();
+                    a.setPreco(rs.getDouble(1));
+                    
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            return null;
         }
     }
     

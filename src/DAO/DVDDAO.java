@@ -9,6 +9,7 @@ import Modelo.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +51,7 @@ public class DVDDAO extends ExecuteSQL {
         try {
             
             
-            String sql =  "select iddvd from dvd where iddvd =" + cod + ""
-                    + "and situacao = 'Disponivel'";
+            String sql =  "select iddvd from dvd where iddvd =" + cod + "and situacao = 'Disponivel'";
             PreparedStatement ps = getCon().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             
@@ -60,7 +60,7 @@ public class DVDDAO extends ExecuteSQL {
                     teste = true;
                 }
             }
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
         }
         return teste;
     }
@@ -289,6 +289,30 @@ public class DVDDAO extends ExecuteSQL {
             }
         } catch (Exception e) {
             return e.getMessage();
+        }
+    }
+    
+    
+    public List<DVD> ListarCodFilme(int cod) {
+        String sql = "select idfilme from dvd where iddvd = " + cod + " ";
+        List<DVD> lista = new ArrayList<>();
+        try {
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs != null) {
+                while (rs.next()) {                    
+                    DVD a = new DVD();
+                    a.setCod_filme(rs.getInt(1));
+                    
+                    lista.add(a);
+                }
+                return lista;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            return null;
         }
     }
     
