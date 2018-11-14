@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 19-Out-2018 às 15:21
+-- Generation Time: 14-Nov-2018 às 19:17
 -- Versão do servidor: 10.1.21-MariaDB
 -- PHP Version: 7.1.1
 
@@ -33,7 +33,7 @@ CREATE TABLE `aluguel` (
   `hora_aluguel` varchar(10) NOT NULL,
   `data_aluguel` varchar(10) NOT NULL,
   `data_devolucao` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -44,7 +44,14 @@ CREATE TABLE `aluguel` (
 CREATE TABLE `categoria` (
   `idcategoria` int(11) NOT NULL,
   `nome` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `categoria`
+--
+
+INSERT INTO `categoria` (`idcategoria`, `nome`) VALUES
+(2, 'Romance');
 
 -- --------------------------------------------------------
 
@@ -56,7 +63,14 @@ CREATE TABLE `classificacao` (
   `idclassificacao` int(11) NOT NULL,
   `nome` varchar(20) NOT NULL,
   `preco` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `classificacao`
+--
+
+INSERT INTO `classificacao` (`idclassificacao`, `nome`, `preco`) VALUES
+(1, '+18', 5);
 
 -- --------------------------------------------------------
 
@@ -76,7 +90,15 @@ CREATE TABLE `cliente` (
   `rua` varchar(45) NOT NULL,
   `numero` int(11) NOT NULL,
   `cep` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `cliente`
+--
+
+INSERT INTO `cliente` (`idcliente`, `nome`, `data_nasc`, `rg`, `cpf`, `email`, `telefone`, `bairro`, `rua`, `numero`, `cep`) VALUES
+(2, 'Manuel', '29/05/2002', '287234236837', '987.495.735-74', 'pedueuzin@gmail.com', '(87)97897-9798', 'baixada', 'nao importa', 69, '59920-000'),
+(3, 'Pedro Alcantara', '07/07/2001', '987987987', '192.168.001-00', 'alcantarap37@gmail.com', '(80)92384-9028', '13 de Maio', 'José Ferreira Sobrinho', 1383, '59920-000');
 
 -- --------------------------------------------------------
 
@@ -90,7 +112,14 @@ CREATE TABLE `dvd` (
   `preco_compra` double DEFAULT NULL,
   `data_compra` varchar(10) DEFAULT NULL,
   `situacao` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `dvd`
+--
+
+INSERT INTO `dvd` (`iddvd`, `idfilme`, `preco_compra`, `data_compra`, `situacao`) VALUES
+(1, 1, 4, '08/11/2018', 'Disponivel');
 
 -- --------------------------------------------------------
 
@@ -101,12 +130,19 @@ CREATE TABLE `dvd` (
 CREATE TABLE `filme` (
   `idfilme` int(11) NOT NULL,
   `titulo` varchar(100) NOT NULL,
-  `ano` int(11) DEFAULT NULL,
+  `ano` varchar(100) DEFAULT NULL,
   `duracao` varchar(20) DEFAULT NULL,
   `idcategoria` int(11) NOT NULL,
   `idclassificacao` int(11) NOT NULL,
   `capa` varchar(80) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `filme`
+--
+
+INSERT INTO `filme` (`idfilme`, `titulo`, `ano`, `duracao`, `idcategoria`, `idclassificacao`, `capa`) VALUES
+(4, 'O Código da Vinci', '03/01/2002', '100:00', 2, 1, 'agenda.png');
 
 -- --------------------------------------------------------
 
@@ -119,14 +155,14 @@ CREATE TABLE `funcionario` (
   `nome` varchar(100) NOT NULL,
   `login` varchar(45) NOT NULL,
   `senha` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `funcionario`
 --
 
 INSERT INTO `funcionario` (`idfuncionario`, `nome`, `login`, `senha`) VALUES
-(1, 'Administrador', 'admin', 'admin');
+(1, 'Administrador (DAVID)', 'admin', 'admin');
 
 --
 -- Indexes for dumped tables
@@ -136,9 +172,7 @@ INSERT INTO `funcionario` (`idfuncionario`, `nome`, `login`, `senha`) VALUES
 -- Indexes for table `aluguel`
 --
 ALTER TABLE `aluguel`
-  ADD PRIMARY KEY (`idaluguel`),
-  ADD KEY `idcliente` (`idcliente`),
-  ADD KEY `iddvd` (`iddvd`);
+  ADD PRIMARY KEY (`idaluguel`);
 
 --
 -- Indexes for table `categoria`
@@ -162,16 +196,13 @@ ALTER TABLE `cliente`
 -- Indexes for table `dvd`
 --
 ALTER TABLE `dvd`
-  ADD PRIMARY KEY (`iddvd`),
-  ADD KEY `idfilme` (`idfilme`);
+  ADD PRIMARY KEY (`iddvd`);
 
 --
 -- Indexes for table `filme`
 --
 ALTER TABLE `filme`
-  ADD PRIMARY KEY (`idfilme`),
-  ADD KEY `idcategoria` (`idcategoria`),
-  ADD KEY `idclassificacao` (`idclassificacao`);
+  ADD PRIMARY KEY (`idfilme`);
 
 --
 -- Indexes for table `funcionario`
@@ -192,56 +223,32 @@ ALTER TABLE `aluguel`
 -- AUTO_INCREMENT for table `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `idcategoria` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idcategoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `classificacao`
 --
 ALTER TABLE `classificacao`
-  MODIFY `idclassificacao` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idclassificacao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `dvd`
 --
 ALTER TABLE `dvd`
-  MODIFY `iddvd` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iddvd` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `filme`
 --
 ALTER TABLE `filme`
-  MODIFY `idfilme` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idfilme` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `funcionario`
 --
 ALTER TABLE `funcionario`
   MODIFY `idfuncionario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- Constraints for dumped tables
---
-
---
--- Limitadores para a tabela `aluguel`
---
-ALTER TABLE `aluguel`
-  ADD CONSTRAINT `aluguel_ibfk_1` FOREIGN KEY (`idcliente`) REFERENCES `cliente` (`idcliente`),
-  ADD CONSTRAINT `aluguel_ibfk_2` FOREIGN KEY (`iddvd`) REFERENCES `dvd` (`iddvd`);
-
---
--- Limitadores para a tabela `dvd`
---
-ALTER TABLE `dvd`
-  ADD CONSTRAINT `dvd_ibfk_1` FOREIGN KEY (`idfilme`) REFERENCES `filme` (`idfilme`);
-
---
--- Limitadores para a tabela `filme`
---
-ALTER TABLE `filme`
-  ADD CONSTRAINT `filme_ibfk_1` FOREIGN KEY (`idcategoria`) REFERENCES `categoria` (`idcategoria`),
-  ADD CONSTRAINT `filme_ibfk_2` FOREIGN KEY (`idclassificacao`) REFERENCES `classificacao` (`idclassificacao`);
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
