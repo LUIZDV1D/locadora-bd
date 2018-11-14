@@ -7,6 +7,7 @@ package Visao.Alterar;
 
 import DAO.*;
 import Modelo.*;
+import Principal.Menu;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -199,7 +200,6 @@ public class AlterarFilme extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(mdCapa)))
                         .addGap(16, 16, 16)))
-                .addGap(18, 18, 18)
                 .addComponent(jLabel9)
                 .addGap(34, 34, 34)
                 .addComponent(codClass, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,6 +255,11 @@ public class AlterarFilme extends javax.swing.JFrame {
 
         jButton2.setText("Limpar");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Alterar");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -266,6 +271,11 @@ public class AlterarFilme extends javax.swing.JFrame {
 
         jButton4.setText("Cancelar");
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -434,6 +444,21 @@ public class AlterarFilme extends javax.swing.JFrame {
        
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        codF.setText("");
+            codCate.setText("");
+            codClass.setText("");
+            titFilme.setText("");
+            duraFilme.setText("");
+            anoFilme.setText("");
+            capaFilme.setText("");
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        new Menu().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

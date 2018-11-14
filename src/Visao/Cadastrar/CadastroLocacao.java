@@ -7,6 +7,7 @@ package Visao.Cadastrar;
 
 import DAO.*;
 import Modelo.*;
+import Principal.Menu;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class CadastroLocacao extends javax.swing.JFrame {
         listaDVD = dvd.ListarCodFilme(cod);
         for (DVD a : listaDVD) {
             int codigo = a.getCod_filme();
-            listaFilme = filme.Pesquisar_Cod_Filme(codigo);
+            listaFilme = filme.Pesquisar_Cod_Filme(cod);
         }
         for (Filme a : listaFilme) {
             titFilme.setText(a.getTitulo());
@@ -191,6 +192,11 @@ public class CadastroLocacao extends javax.swing.JFrame {
 
         jButton2.setText("Limpar");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Cadastrar");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -202,6 +208,11 @@ public class CadastroLocacao extends javax.swing.JFrame {
 
         jButton4.setText("Cancelar");
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -350,11 +361,9 @@ public class CadastroLocacao extends javax.swing.JFrame {
                 valADVD.setText("");
                 catDVD.setText("");
                 claDVD.setText("");
-                icoDVD.setIcon(new ImageIcon(""));
                 codigoDVD.setText("");
             } else {
                 InserirDados(cod);
-                codigoDVD.setText(pesquisa);
                 codDVD.setText("");
             }
         }
@@ -407,6 +416,20 @@ public class CadastroLocacao extends javax.swing.JFrame {
         
         Conexao.FecharConexao(con);
     }//GEN-LAST:event_comboCliActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+                codDVD.setText("");
+                titFilme.setText("");
+                valADVD.setText("");
+                catDVD.setText("");
+                claDVD.setText("");
+                codigoDVD.setText("");
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        new Menu().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

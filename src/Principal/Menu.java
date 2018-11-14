@@ -354,7 +354,7 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new EfetuarDevolucao().setVisible(true);
+        new ConsultaDevolucao().setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -390,8 +390,12 @@ public class Menu extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Object[] options = { "Confirmar", "Cancelar" };
-        JOptionPane.showOptionDialog(null, "Clique Confirmar para continuar", 
+        int opc = JOptionPane.showOptionDialog(null, "Clique Confirmar para continuar", 
                 "Informação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        
+        if (opc == 0) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed

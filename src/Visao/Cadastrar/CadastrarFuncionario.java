@@ -7,6 +7,7 @@ package Visao.Cadastrar;
 
 import DAO.*;
 import Modelo.*;
+import Principal.Menu;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 
@@ -83,6 +84,7 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
 
         jLabel5.setText("Senha:");
 
+        jTextField1.setEditable(false);
         jTextField1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
 
         nomeFu.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
@@ -97,6 +99,11 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
 
         jButton1.setText("Limpar");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cadastrar");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -108,6 +115,11 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
 
         jButton3.setText("Cancelar");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -216,6 +228,17 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
                     "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        nomeFu.setText("");
+            logFu.setText("");
+            senhaFu.setText("");
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        new Menu().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -8,6 +8,7 @@ package Visao.Cadastrar;
 import DAO.*;
 import DAO.Conexao;
 import Modelo.*;
+import Principal.Menu;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -131,6 +132,11 @@ public class CadastrarFilme extends javax.swing.JFrame {
 
         jButton1.setText("Limpar");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cadastrar");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -142,6 +148,11 @@ public class CadastrarFilme extends javax.swing.JFrame {
 
         jButton3.setText("Cancelar");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -178,6 +189,14 @@ public class CadastrarFilme extends javax.swing.JFrame {
         jLabel6.setText("Classificação:");
 
         jLabel7.setText("Capa:");
+
+        jTextField1.setEditable(false);
+
+        idCate.setEditable(false);
+
+        idClas.setEditable(false);
+
+        nCapa.setEditable(false);
 
         btnCapa.setText("OK");
         btnCapa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -435,6 +454,19 @@ public class CadastrarFilme extends javax.swing.JFrame {
         
         Conexao.FecharConexao(con);
     }//GEN-LAST:event_comboClasActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        titFilme.setText("");
+            duracF.setText("");
+            idCate.setText("");
+            idClas.setText("");
+            nCapa.setText("");
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        new Menu().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
