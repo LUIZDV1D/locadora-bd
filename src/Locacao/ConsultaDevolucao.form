@@ -28,26 +28,21 @@
               <Component id="jScrollPane1" pref="1041" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="235" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-              <Component id="comboCli" min="-2" pref="542" max="-2" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
+              <Component id="jButton3" min="-2" pref="132" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="438" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace pref="24" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="comboCli" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" min="-2" pref="415" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="415" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jButton3" pref="54" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -79,22 +74,16 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JButton" name="jButton3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Cliente:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="comboCli">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="1">
-            <StringItem index="0" value="selecione um item..."/>
-          </StringArray>
+        <Property name="text" type="java.lang.String" value="Cancelar"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Cursor em Forma de M&#xe3;o"/>
         </Property>
       </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

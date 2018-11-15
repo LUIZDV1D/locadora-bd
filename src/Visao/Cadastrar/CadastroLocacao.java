@@ -29,11 +29,10 @@ public class CadastroLocacao extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(this);
         AtualizaCombo();
-        AtualizaDate();
     }
     
     
-    private void InserirDados(int cod) {
+    private void InserirDados(int cod){
         
         String home = System.getProperty("user.home");
         String diretorio = home+"/Video Locadora/pictures/";
@@ -41,29 +40,30 @@ public class CadastroLocacao extends javax.swing.JFrame {
         Connection con = Conexao.AbrirConexao();
         DVDDAO dvd = new DVDDAO(con);
         FIlmeDAO filme = new FIlmeDAO(con);
+        
         List<DVD> listaDVD = new ArrayList<>();
-        List<Filme> listaFilme = new ArrayList<>();
+        List<Filme> listaFIL = new ArrayList<>();
+        
         listaDVD = dvd.ListarCodFilme(cod);
+        
         for (DVD a : listaDVD) {
+            
             int codigo = a.getCod_filme();
-            listaFilme = filme.Pesquisar_Cod_Filme(cod);
+            listaFIL = filme.Pesquisar_Cod_Filme(codigo);
+            
         }
-        for (Filme a : listaFilme) {
+        
+        for (Filme a : listaFIL) {
+            
             titFilme.setText(a.getTitulo());
             catDVD.setText("" + a.getCod_categoria());
             claDVD.setText("" + a.getCod_classificacao());
-            icoDVD.setIcon(new ImageIcon(home+a.getCapa()));
+            icoDVD.setIcon(new ImageIcon(diretorio + a.getCapa() + "/"));
+            
         }
         
-        ClassificacaoDAO cla = new ClassificacaoDAO(con);
-        List<Classificacao> listaCLA = new ArrayList<>();
-        String b = claDVD.getText();
-        int codigo = Integer.parseInt(b);
-        // listaCLA = cla.ListarPrecoClassificacao(codigo);
-        for(Classificacao a : listaCLA) {
-            double preco = a.getPreco();
-            valADVD.setText("" + preco + "0");
-        }
+        Conexao.FecharConexao(con);
+        
     }
     
     
@@ -74,8 +74,8 @@ public class CadastroLocacao extends javax.swing.JFrame {
         List<Cliente> lista = new ArrayList<>();
         lista = sql.ListarComboCliente();
         
-        for (Cliente b : lista) {
-            comboCli.addItem(b.getNome());
+        for (Cliente k : lista) {
+            comboCli.addItem(k.getNome());
         }
         
         Conexao.FecharConexao(con);
@@ -139,8 +139,6 @@ public class CadastroLocacao extends javax.swing.JFrame {
             }
         });
 
-        codigoDVD.setEditable(false);
-
         jLabel2.setText("Horas:");
 
         horaL.setEditable(false);
@@ -154,17 +152,9 @@ public class CadastroLocacao extends javax.swing.JFrame {
 
         jLabel4.setText("Título:");
 
-        titFilme.setEditable(false);
-
         jLabel5.setText("Categoria:");
 
-        catDVD.setEditable(false);
-
-        claDVD.setEditable(false);
-
         jLabel6.setText("Classificação:");
-
-        valADVD.setEditable(false);
 
         jLabel7.setText("Valor de Aluguel:");
 
@@ -181,7 +171,6 @@ public class CadastroLocacao extends javax.swing.JFrame {
 
         jLabel9.setText("Data de Locação:");
 
-        dlDVD.setEditable(false);
         try {
             dlDVD.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -334,15 +323,17 @@ public class CadastroLocacao extends javax.swing.JFrame {
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         String pesquisa = codDVD.getText();
+        int cod = Integer.parseInt(pesquisa);
         Connection con = Conexao.AbrirConexao();
+        
         if (pesquisa.equals("")) {
             JOptionPane.showMessageDialog(null, "Digite o código do DVD",
                     "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
         } else {
             
             DVDDAO sql = new DVDDAO(con);
-            int cod = Integer.parseInt(pesquisa);
-            if (sql.Testar_DVD(cod) == false) {
+            
+            if (sql.Teste_DVD(cod) == false) {
                 JOptionPane.showMessageDialog(null, "Código do DVD não encontrado",
                         "Vídeo Locadora", JOptionPane.ERROR_MESSAGE);
                 codDVD.setText("");
@@ -350,8 +341,8 @@ public class CadastroLocacao extends javax.swing.JFrame {
                 valADVD.setText("");
                 catDVD.setText("");
                 claDVD.setText("");
-                icoDVD.setIcon(new ImageIcon(""));
                 codigoDVD.setText("");
+                
             } else if (sql.Testar_Situacao(cod) == false) {
                 JOptionPane.showMessageDialog(null, "O DVD de código ("+cod+")"
                         + " está emprestado", "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
@@ -362,10 +353,15 @@ public class CadastroLocacao extends javax.swing.JFrame {
                 catDVD.setText("");
                 claDVD.setText("");
                 codigoDVD.setText("");
+                
             } else {
+                
                 InserirDados(cod);
+                codigoDVD.setText(pesquisa);
                 codDVD.setText("");
+                
             }
+            AtualizaDate();
         }
         Conexao.FecharConexao(con);
     }//GEN-LAST:event_btnOkActionPerformed
@@ -380,17 +376,23 @@ public class CadastroLocacao extends javax.swing.JFrame {
                     "Vídeo Locadora", JOptionPane.WARNING_MESSAGE);
         } else {
             String devolucao = new SimpleDateFormat("dd/MM/yyyy").format(dataD.getDate());
+            
             Connection con = Conexao.AbrirConexao();
             AluguelDAO sql = new AluguelDAO(con);
+            
             int coddvd = Integer.parseInt(dvd);
             int codcli = Integer.parseInt(cliente);
+            
             Aluguel a = new Aluguel();
+            
             a.setCoddvd(coddvd);
             a.setCodcliente(codcli);
             a.setHorario(horario);
             a.setData_aluguel(aluguel);
             a.setData_devolucao(devolucao);
+            
             sql.Inserir_Aluguel(a);
+            
             String situacao = "Emprestado";
             sql.Atualizar_Situacao(situacao, coddvd);
             Conexao.FecharConexao(con);
@@ -398,6 +400,7 @@ public class CadastroLocacao extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso",
                     "Vídeo Locadora", JOptionPane.INFORMATION_MESSAGE);
             dispose();
+            new Menu().setVisible(true);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -406,12 +409,17 @@ public class CadastroLocacao extends javax.swing.JFrame {
         ClienteDAO sql = new ClienteDAO(con);
         List<Cliente> lista = new ArrayList<>();
         String nome = comboCli.getSelectedItem().toString();
+        int n = comboCli.getSelectedIndex();
         
         lista = sql.ConsultarCodigoCliente(nome);
         
-        for (Cliente b : lista) {
+        if (n > 0) {
+           for (Cliente b : lista) {
             int a = b.getCodigo();
             codCli.setText("" + a);
+        } 
+        } else {
+            codCli.setText("");
         }
         
         Conexao.FecharConexao(con);

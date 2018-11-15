@@ -229,7 +229,7 @@ public class FIlmeDAO extends ExecuteSQL{
     //Pesquisar porn código
     public List<Filme> Pesquisar_Cod_Filme(int cod) {
         String sql = "select idfilme,titulo,ano,duracao,idcategoria,idclassificacao,capa "
-                + "from filme where idfilme = '" + cod + "'";
+                + "from filme where idfilme = " + cod + "";
         List<Filme> lista = new ArrayList<>();
         
         try {

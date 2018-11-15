@@ -158,7 +158,7 @@ public class CadastrarDVD extends javax.swing.JFrame {
         jLabel5.setText("Situação:");
 
         sitDVD.setEditable(false);
-        sitDVD.setText("Disponível");
+        sitDVD.setText("Disponivel");
 
         comboFilme.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "selecione um item..." }));
         comboFilme.addActionListener(new java.awt.event.ActionListener() {

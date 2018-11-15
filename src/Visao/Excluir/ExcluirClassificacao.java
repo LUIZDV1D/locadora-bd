@@ -174,6 +174,7 @@ public class ExcluirClassificacao extends javax.swing.JFrame {
                 sql.Excluir_Classificacao(a);
                 Conexao.FecharConexao(con);
                 dispose();
+                new Menu().setVisible(true);
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed

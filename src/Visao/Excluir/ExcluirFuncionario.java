@@ -189,6 +189,7 @@ public class ExcluirFuncionario extends javax.swing.JFrame {
                 sql.Excluir_Funcionario(a);
                 Conexao.FecharConexao(con);
                 dispose();
+                new Menu().setVisible(true);
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed

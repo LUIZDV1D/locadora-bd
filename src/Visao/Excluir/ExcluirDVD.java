@@ -25,17 +25,18 @@ public class ExcluirDVD extends javax.swing.JFrame {
     public ExcluirDVD() {
         initComponents();
         setLocationRelativeTo(this);
+        AtualizaCombo();
     }
     
     
     private void AtualizaCombo() {
         Connection con = Conexao.AbrirConexao();
-        ClassificacaoDAO sql = new ClassificacaoDAO(con);
-        List<Classificacao> lista = new ArrayList<>();
-        lista = sql.ListarComboClassificacao();
+        DVDDAO sql = new DVDDAO(con);
+        List<DVD> lista = new ArrayList<>();
+        lista = sql.ListarComboDVD();
         
-        for (Classificacao b : lista) {
-            comboDVD.addItem(b.getNome());
+        for (DVD b : lista) {
+            comboDVD.addItem("" + b.getCodigo());
         }
         
         Conexao.FecharConexao(con);
@@ -83,9 +84,10 @@ public class ExcluirDVD extends javax.swing.JFrame {
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
+        idDVD.setEditable(false);
+
         jLabel2.setText("Nome:");
 
-        comboDVD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "selecione um item..." }));
         comboDVD.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         comboDVD.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,6 +173,7 @@ public class ExcluirDVD extends javax.swing.JFrame {
                 sql.Excluir_DVD(a);
                 Conexao.FecharConexao(con);
                 dispose();
+                new Menu().setVisible(true);
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -179,14 +182,13 @@ public class ExcluirDVD extends javax.swing.JFrame {
         Connection con = Conexao.AbrirConexao();
         DVDDAO sql = new DVDDAO(con);
         List<DVD> lista = new ArrayList<>();
-        String nome = idDVD.getText();
-        int Nome = Integer.parseInt(nome);
+        String c = comboDVD.getSelectedItem().toString();
         
-        lista = sql.ConsultarCodigoDVD(Nome);
+        lista = sql.ConsultarCodigoDVD(Integer.parseInt(c));
         
         for (DVD b : lista) {
-            int a = b.getCodigo();
-            idDVD.setText("" + a);
+          int a = b.getCodigo();
+          idDVD.setText("" + a);
         }
         
         Conexao.FecharConexao(con);

@@ -153,7 +153,7 @@ public class Login extends javax.swing.JFrame {
                             bprog.setValue(i);
                             
                             try {
-                                Thread.sleep(20);
+                                Thread.sleep(12);
                             } catch (Exception e) {
                                 e.getMessage();
                             }

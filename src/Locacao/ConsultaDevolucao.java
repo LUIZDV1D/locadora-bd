@@ -5,13 +5,15 @@
  */
 package Locacao;
 
-import DAO.ClienteDAO;
-import DAO.Conexao;
-import Modelo.Cliente;
-import Modelo.Listar;
+import DAO.*;
+import Modelo.*;
+import Principal.Menu;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -25,18 +27,34 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
     public ConsultaDevolucao() {
         initComponents();
         setLocationRelativeTo(this);
-        AtualizaCombo();
+        AtualizaTable();
     }
     
     
-    private void AtualizaCombo() {
+    
+    private void AtualizaTable() {
         Connection con = Conexao.AbrirConexao();
-        ClienteDAO sql = new ClienteDAO(con);
-        List<Cliente> lista = new ArrayList<>();
-        lista = sql.ListarComboCliente();
+        AluguelDAO bd = new AluguelDAO(con);
+        List<Aluguel> lista = new ArrayList<>();
+        lista = bd.ListarAluguel();
+        DefaultTableModel tbm = 
+                (DefaultTableModel) jTable1.getModel();
         
-        for (Cliente b : lista) {
-            comboCli.addItem(b.getNome());
+        while (tbm.getRowCount() > 0) {            
+            tbm.removeRow(0);
+        }
+        
+        int i = 0;
+        
+        for (Aluguel tab : lista) {
+            tbm.addRow(new String[i]);
+            jTable1.setValueAt(tab.getCod(), i, 0);
+            jTable1.setValueAt(tab.getCoddvd(), i, 1);
+            jTable1.setValueAt(tab.getCodcliente(), i, 2);
+            jTable1.setValueAt(tab.getHorario(), i, 3);
+            jTable1.setValueAt(tab.getData_aluguel(), i, 4);
+           jTable1.setValueAt(tab.getData_devolucao(), i, 5);
+            i++;
         }
         
         Conexao.FecharConexao(con);
@@ -53,8 +71,7 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        comboCli = new javax.swing.JComboBox<>();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,9 +90,13 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel1.setText("Cliente:");
-
-        comboCli.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "selecione um item..." }));
+        jButton3.setText("Cancelar");
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,40 +106,54 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1041, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(235, 235, 235)
-                .addComponent(jLabel1)
-                .addGap(45, 45, 45)
-                .addComponent(comboCli, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(438, 438, 438))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(comboCli, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
+                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                .addGap(7, 7, 7))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        Connection con = Conexao.AbrirConexao();
+        
         Integer linha = jTable1.getSelectedRow();
         Integer idaluguel = (Integer) jTable1.getValueAt(linha, 0);
         Integer idcliente = (Integer) jTable1.getValueAt(linha, 1);
         Integer iddvd = (Integer) jTable1.getValueAt(linha, 2);
-        Listar a = new Listar();
-        a.setCoddvd(iddvd);
-        a.setCodaluguel(idaluguel);
-        a.setCodcliente(idcliente);
         
-        new EfetuarDevolucao().setVisible(true);
+        AluguelDAO a = new AluguelDAO(con);
+        Listar listar = new Listar();
+        
+        Object[] options = { "Confirmar", "Cancelar" };
+        int opc = JOptionPane.showOptionDialog(null, "Deseja efetuar a devolução?", 
+                "Vídeo Locadora", 
+                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        
+        if (opc == 0) {
+            listar.setCoddvd(iddvd);
+            listar.setCodaluguel(idaluguel);
+            a.ExcluirAluguel(listar);
+            new Menu().setVisible(true);
+            dispose();
+        }
+        Conexao.FecharConexao(con);
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        new Menu().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,8 +191,10 @@ public class ConsultaDevolucao extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> comboCli;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

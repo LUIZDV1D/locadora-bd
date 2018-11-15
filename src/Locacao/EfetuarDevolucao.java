@@ -18,6 +18,11 @@ public class EfetuarDevolucao extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(this);
     }
+    
+    
+    private void InserirDados() {
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,24 +61,42 @@ public class EfetuarDevolucao extends javax.swing.JFrame {
 
         jLabel1.setText("Código do Aluguel:");
 
+        jTextField1.setEditable(false);
+
         jButton2.setText("Devolver");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jButton4.setText("Cancelar");
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jTextField2.setEditable(false);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/DVD_VIDEO_logo.png"))); // NOI18N
 
         jLabel4.setText("Filme:");
 
+        jTextField3.setEditable(false);
+
         jLabel5.setText("Categoria:");
 
+        jTextField4.setEditable(false);
+
+        jTextField5.setEditable(false);
+
         jLabel6.setText("Classificação:");
+
+        jTextField6.setEditable(false);
 
         jLabel7.setText("Valor de Aluguel:");
 
         jLabel9.setText("Data de Locação:");
 
+        jFormattedTextField2.setEditable(false);
         try {
             jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -84,6 +107,7 @@ public class EfetuarDevolucao extends javax.swing.JFrame {
 
         jLabel2.setText("Código do DVD:");
 
+        jFormattedTextField3.setEditable(false);
         try {
             jFormattedTextField3.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -92,6 +116,7 @@ public class EfetuarDevolucao extends javax.swing.JFrame {
 
         jLabel11.setText("Horas:");
 
+        jFormattedTextField4.setEditable(false);
         try {
             jFormattedTextField4.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
         } catch (java.text.ParseException ex) {
@@ -99,6 +124,8 @@ public class EfetuarDevolucao extends javax.swing.JFrame {
         }
 
         jLabel8.setText("Cliente:");
+
+        jTextField7.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -226,6 +253,11 @@ public class EfetuarDevolucao extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        new ConsultaDevolucao().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

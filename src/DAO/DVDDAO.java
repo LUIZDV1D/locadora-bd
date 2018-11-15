@@ -45,24 +45,70 @@ public class DVDDAO extends ExecuteSQL {
     }
     
     
-    //Testar situação
-    public boolean Testar_Situacao(int cod) {
+    
+//Coisas do DVDDAO
+
+public boolean Teste_DVD(int cod) {
+        
         boolean teste = false;
+        
         try {
             
-            
-            String sql =  "select iddvd from dvd where iddvd =" + cod + "and situacao = 'Disponivel'";
+            String sql = "select iddvd from dvd where iddvd = "+ cod +"";
             PreparedStatement ps = getCon().prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();   
             
             if (rs != null) {
-                while (rs.next()) {                    
+                
+                while (rs.next()) {
+                    
                     teste = true;
+                    
                 }
+                
             }
-        } catch (SQLException ex) {
+            
+        } catch (SQLException e) {
+       
+            e.getMessage();
+            
         }
+        
         return teste;
+        
+    }
+
+    
+    
+    //Testar situação
+     public boolean Testar_Situacao(int cod) {
+        
+        boolean teste = false;
+        
+        try {
+            
+            String sql = "select iddvd from dvd where iddvd = "+ cod +" and situacao = 'Disponivel'";
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();   
+            
+            if (rs != null) {
+                
+                while (rs.next()) {
+                    
+                    teste = true;
+                    
+                }
+                
+            }
+            
+        } catch (SQLException e) {
+       
+            e.getMessage();
+            
+        }
+        
+        return teste;
+        
     }
     
     
@@ -293,9 +339,48 @@ public class DVDDAO extends ExecuteSQL {
     }
     
     
-    public List<DVD> ListarCodFilme(int cod) {
-        String sql = "select idfilme from dvd where iddvd = " + cod + " ";
+    public List<DVD> ListarCodFilme(int cod){
+        
+        String sql = "select idfilme from dvd where iddvd = "+ cod +"";
         List<DVD> lista = new ArrayList<>();
+        
+        try {
+            
+            PreparedStatement ps = getCon().prepareStatement(sql);
+            ResultSet rs = ps .executeQuery();
+            
+            if (rs != null) {
+                
+                while (rs.next()) {
+                    
+                    DVD a = new DVD();
+                    a.setCod_filme(rs.getInt(1));
+                    
+                    lista.add(a);
+                    
+                }
+            
+                return lista;
+                
+            } else {
+                
+                return null;
+                
+            }
+            
+        } catch (SQLException e) {
+            
+            return null;
+            
+        }
+        
+    }
+    
+    
+    public List<DVD> ListarComboDVD() {
+        String sql = "select iddvd from dvd order by iddvd asc";
+        List<DVD> lista = new ArrayList<>();
+        
         try {
             PreparedStatement ps = getCon().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -303,15 +388,14 @@ public class DVDDAO extends ExecuteSQL {
             if (rs != null) {
                 while (rs.next()) {                    
                     DVD a = new DVD();
-                    a.setCod_filme(rs.getInt(1));
-                    
+                    a.setCodigo(rs.getInt(1));
                     lista.add(a);
                 }
                 return lista;
             } else {
                 return null;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             return null;
         }
     }
