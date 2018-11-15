@@ -370,7 +370,7 @@ public class AlterarFilme extends javax.swing.JFrame {
     private void mdCapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mdCapaActionPerformed
         
         String home = System.getProperty("user.home");
-        String diretorio = home+"/Video Locadora/pictures/";
+        String diretorio = "ImagensFilme/";
         
         try {
             JFileChooser foto = new JFileChooser();
@@ -389,7 +389,7 @@ public class AlterarFilme extends javax.swing.JFrame {
             FileChannel fcOrigem;
             FileChannel fcDestino;
             origem = new FileInputStream(""+d);//arquivo que você quer copiar
-            destino = new FileOutputStream(home+"/Video Locadora/pictures/"+a);//onde irá ficar a copia do aquivo
+            destino = new FileOutputStream("ImagensFilme/"+a);//onde irá ficar a copia do aquivo
             fcOrigem = origem.getChannel();
             fcDestino = destino.getChannel();
             fcOrigem.transferTo(0, fcOrigem.size(), fcDestino);//copiando o arquivo e salvando no diretório que você escolheu

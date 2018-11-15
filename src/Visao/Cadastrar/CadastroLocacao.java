@@ -58,7 +58,7 @@ public class CadastroLocacao extends javax.swing.JFrame {
             titFilme.setText(a.getTitulo());
             catDVD.setText("" + a.getCod_categoria());
             claDVD.setText("" + a.getCod_classificacao());
-            icoDVD.setIcon(new ImageIcon(diretorio + a.getCapa() + "/"));
+            icoDVD.setIcon(new ImageIcon("ImagensFilme/" + a.getCapa() + "/"));
             
         }
         
